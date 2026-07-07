@@ -1,154 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Masud Rananayeem · Web Developer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masud Rananayeem | Web Developer Portfolio</title>
 
-  <!-- FAVICON -->
-  <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
-
-  <!-- Tailwind -->
+  <!-- ========================================== -->
+<!-- FAVICON - Full Package (Vercel Compatible) -->
+<!-- ========================================== -->
+<link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon_io/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon_io/android-chrome-512x512.png">
+<link rel="manifest" href="favicon_io/site.webmanifest">
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
+  
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+  
   <style>
-    /* ----- global reset & base ----- */
-    * { margin:0; padding:0; box-sizing:border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
       font-family: 'Inter', sans-serif;
-      background: #0b0b0b;
+      background: #000000;
       color: #f0f0f0;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
     }
-
-    /* scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #121212; }
-    ::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
-
-    /* fade-up */
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #3a3a3a;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #5a5a5a;
+    }
+    
+    /* Fade up animation */
     .fade-up {
       opacity: 0;
       transform: translateY(40px);
       transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.2), transform 0.8s ease;
     }
-    .fade-up.show { opacity: 1; transform: translateY(0); }
-
-    /* ----- glassmorphism cards ----- */
-    .glass-card {
-      background: rgba(18, 18, 18, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 2rem;
-      transition: all 0.35s ease;
+    .fade-up.show {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .glass-card:hover {
-      border-color: rgba(255, 255, 255, 0.15);
-      transform: translateY(-4px);
-      box-shadow: 0 30px 40px -20px rgba(0,0,0,0.8);
+    
+    /* Info Cards Styling */
+    .info-card {
+      background: #0c0c0c;
+      border: 1px solid #222;
+      border-radius: 1.5rem;
+      transition: all 0.3s ease;
     }
-
-    .glass-card h3 {
+    .info-card:hover {
+      transform: translateY(-5px);
+      border-color: #444;
+      box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+    }
+    
+    .info-card h3 {
       font-size: 1.5rem;
       font-weight: 700;
       margin-bottom: 1.5rem;
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      background: linear-gradient(135deg, #f0f0f0, #a0a0a0);
+      gap: 10px;
+      background: linear-gradient(135deg, #fff, #aaa);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-
-    .glass-card ul { list-style: none; padding:0; }
-    .glass-card ul li {
+    
+    .info-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-card ul li {
       margin-bottom: 1rem;
       line-height: 1.5;
-      color: #cfcfcf;
+      color: #c0c0c0;
       font-size: 0.95rem;
     }
-    .glass-card ul li i {
-      width: 26px;
-      color: #888;
-      margin-right: 6px;
+    
+    .info-card ul li i {
+      width: 28px;
+      color: #9a9a9a;
+      margin-right: 8px;
     }
-    .glass-card ul li a {
-      color: #cfcfcf;
+    
+    .info-card ul li a {
+      color: #c0c0c0;
       text-decoration: none;
       transition: color 0.2s;
     }
-    .glass-card ul li a:hover { color: white; }
-
-    /* skill chips */
+    .info-card ul li a:hover {
+      color: white;
+    }
+    
+    /* Skill chip */
     .skill-chip {
-      background: #151515;
+      background: #121212;
       border: 1px solid #2a2a2a;
-      padding: 0.5rem 1.3rem;
-      border-radius: 2.5rem;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
       font-size: 0.85rem;
-      font-weight: 500;
       transition: all 0.25s;
-      letter-spacing: 0.2px;
     }
     .skill-chip:hover {
-      background: #1f1f1f;
-      border-color: #5a5a5a;
       transform: translateY(-3px);
+      background: #1c1c1c;
+      border-color: #5a5a5a;
     }
-
-    /* project cards */
-    .project-card {
-      background: #0e0e0e;
-      border-radius: 2rem;
-      border: 1px solid #1e1e1e;
-      transition: all 0.35s ease;
-      overflow: hidden;
-    }
-    .project-card:hover {
-      border-color: #3a3a3a;
-      transform: translateY(-6px);
-      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.7);
-    }
-    .project-card .thumb {
-      height: 160px;
-      background: linear-gradient(145deg, #151515, #0a0a0a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.8rem;
-      color: #4a4a4a;
-    }
-
-    /* footer */
+    
+    /* Footer styling matching gray/black theme */
     .site-footer {
-      background: #070707;
-      border-top: 1px solid #1a1a1a;
-      padding: 3rem 0 1rem;
+      background: #040404;
+      border-top: 1px solid #1f1f1f;
+      padding: 3rem 0 1rem 0;
+      margin-top: 0;
     }
+    
     .footer-container {
       max-width: 1280px;
       margin: 0 auto;
       padding: 0 2rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 2.5rem;
     }
+    
     .footer-col h4 {
-      color: #fff;
-      font-size: 1rem;
+      color: #ffffff;
+      font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 1.2rem;
       letter-spacing: -0.2px;
@@ -160,112 +164,200 @@
       position: absolute;
       bottom: -8px;
       left: 0;
-      width: 32px;
+      width: 40px;
       height: 2px;
-      background: #444;
+      background: #555;
     }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 0.6rem; }
+    
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 0.7rem;
+    }
     .footer-col ul li a {
-      color: #8a8a8a;
+      color: #9a9a9a;
       text-decoration: none;
       font-size: 0.85rem;
       transition: color 0.2s;
     }
-    .footer-col ul li a:hover { color: white; padding-left: 4px; }
-    .footer-col ul li i { width: 22px; color: #6a6a6a; }
+    .footer-col ul li a:hover {
+      color: white;
+      padding-left: 5px;
+    }
+    .footer-col ul li i {
+      width: 22px;
+      font-size: 0.8rem;
+      margin-right: 6px;
+      color: #7a7a7a;
+    }
+    
     .footer-social {
       display: flex;
-      gap: 0.8rem;
+      gap: 1rem;
+      margin-top: 0.5rem;
       flex-wrap: wrap;
-      margin-top: 0.3rem;
     }
     .footer-social a {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       background: #121212;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      color: #b0b0b0;
-      font-size: 1rem;
+      color: #c0c0c0;
+      font-size: 1.1rem;
       transition: all 0.25s;
-      border: 1px solid #282828;
+      border: 1px solid #2a2a2a;
     }
     .footer-social a:hover {
-      background: #242424;
+      background: #252525;
       color: white;
       transform: translateY(-3px);
       border-color: #666;
     }
+    
     .footer-bottom {
       text-align: center;
       padding-top: 2rem;
       margin-top: 2rem;
-      border-top: 1px solid #181818;
+      border-top: 1px solid #1a1a1a;
       font-size: 0.75rem;
-      color: #5a5a5a;
+      color: #6a6a6a;
     }
-    @media (max-width: 640px) {
-      .footer-container { grid-template-columns: 1fr; text-align: center; }
-      .footer-col h4:after { left: 50%; transform: translateX(-50%); }
-      .footer-social { justify-content: center; }
+    
+    @media (max-width: 768px) {
+      .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .footer-col h4:after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .footer-social {
+        justify-content: center;
+      }
     }
-
-    /* ----- hero animations (refined) ----- */
-    @keyframes spin-slow { to { transform: rotate(360deg); } }
-    @keyframes spin-reverse { to { transform: rotate(-360deg); } }
+    
+    /* Custom Animations for Circular Image */
+    @keyframes spin-slow {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    @keyframes spin-reverse {
+      from {
+        transform: rotate(360deg);
+      }
+      to {
+        transform: rotate(0deg);
+      }
+    }
+    
     @keyframes pulse-glow {
-      0%,100% { opacity: 0.15; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(1.04); }
+      0%, 100% {
+        opacity: 0.1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.3;
+        transform: scale(1.05);
+      }
     }
+    
     @keyframes float {
-      0%,100% { transform: translateY(0) translateX(0); }
-      50% { transform: translateY(-10px) translateX(4px); }
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translateY(-10px) translateX(5px);
+        opacity: 1;
+      }
     }
+    
     @keyframes float2 {
-      0%,100% { transform: translateY(0) translateX(0); }
-      50% { transform: translateY(8px) translateX(-6px); }
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translateY(8px) translateX(-8px);
+        opacity: 1;
+      }
     }
+    
     @keyframes float3 {
-      0%,100% { transform: translateY(0) translateX(0); }
-      50% { transform: translateY(-6px) translateX(-4px); }
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.4;
+      }
+      50% {
+        transform: translateY(-6px) translateX(-4px);
+        opacity: 1;
+      }
     }
-    .animate-spin-slow { animation: spin-slow 10s linear infinite; }
-    .animate-spin-reverse { animation: spin-reverse 14s linear infinite; }
-    .animate-pulse-glow { animation: pulse-glow 3.5s ease-in-out infinite; }
-    .animate-float { animation: float 4.5s ease-in-out infinite; }
-    .animate-float-delay { animation: float 5s ease-in-out infinite 1s; }
-    .animate-float2 { animation: float2 4.8s ease-in-out infinite 0.6s; }
-    .animate-float3 { animation: float3 3.8s ease-in-out infinite 1.8s; }
-
-    /* gradient text helper */
-    .gradient-text {
-      background: linear-gradient(135deg, #ffffff 20%, #a0a0a0 80%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    
+    .animate-spin-slow {
+      animation: spin-slow 8s linear infinite;
+    }
+    
+    .animate-spin-reverse {
+      animation: spin-reverse 12s linear infinite;
+    }
+    
+    .animate-pulse-glow {
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+    
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+    
+    .animate-float-delay {
+      animation: float 5s ease-in-out infinite 1s;
+    }
+    
+    .animate-float2 {
+      animation: float2 4.5s ease-in-out infinite 0.5s;
+    }
+    
+    .animate-float3 {
+      animation: float3 3.5s ease-in-out infinite 2s;
     }
   </style>
 </head>
 <body>
-
-<!-- ===== NAV ===== -->
-<nav class="fixed top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-xl border-b border-white/5 py-3">
+  
+<!-- ========== NAVIGATION BAR ========== -->
+<nav class="navbar py-4 fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
   <div class="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
-    <a href="#home" class="text-2xl font-black tracking-tighter text-white">MRN<span class="text-gray-500">.DEV</span></a>
+    <a href="#home" class="text-2xl font-black tracking-tighter text-white">MRN<span class="text-gray-400">.DEV</span></a>
+    
     <div class="hidden md:flex gap-8">
-      <a href="#home" class="text-gray-300 hover:text-white text-sm font-medium transition">Home</a>
-      <a href="#skills" class="text-gray-300 hover:text-white text-sm font-medium transition">Skills</a>
-      <a href="#projects" class="text-gray-300 hover:text-white text-sm font-medium transition">Projects</a>
-      <a href="#education" class="text-gray-300 hover:text-white text-sm font-medium transition">Education</a>
-      <a href="#contact-info" class="text-gray-300 hover:text-white text-sm font-medium transition">Contact</a>
+      <a href="#home" class="nav-link text-gray-300 hover:text-white text-sm font-medium transition">Home</a>
+      <a href="#skills" class="nav-link text-gray-300 hover:text-white text-sm font-medium transition">Skills</a>
+      <a href="#projects" class="nav-link text-gray-300 hover:text-white text-sm font-medium transition">Projects</a>
+      <a href="#education" class="nav-link text-gray-300 hover:text-white text-sm font-medium transition">Education</a>
+      <a href="#contact-info" class="nav-link text-gray-300 hover:text-white text-sm font-medium transition">Contact</a>
     </div>
-    <a href="#contact-info" class="hidden md:inline-block px-5 py-2 border border-white/20 rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all duration-300">Hire Me</a>
-    <div class="md:hidden text-white text-xl cursor-pointer" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+    
+    <a href="#contact-info" class="hidden md:block px-5 py-2 border border-white/30 rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all duration-300">Hire Me</a>
+    
+    <!-- Mobile menu button -->
+    <div class="md:hidden">
+      <i class="fas fa-bars text-white text-xl cursor-pointer" id="mobileMenuBtn"></i>
+    </div>
   </div>
-  <div id="mobileMenu" class="md:hidden hidden bg-black/95 backdrop-blur-lg border-t border-gray-800 mt-2 py-4 px-6 flex flex-col gap-3">
+  
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="md:hidden hidden bg-black/95 backdrop-blur-lg border-t border-gray-800 mt-4 py-4 px-6 flex flex-col gap-3">
     <a href="#home" class="text-gray-300 hover:text-white py-2 transition">Home</a>
     <a href="#skills" class="text-gray-300 hover:text-white py-2 transition">Skills</a>
     <a href="#projects" class="text-gray-300 hover:text-white py-2 transition">Projects</a>
@@ -274,63 +366,80 @@
   </div>
 </nav>
 
-<!-- ===== HERO (refined gray/black elegance) ===== -->
-<section id="home" class="min-h-screen bg-gradient-to-br from-[#d0d0d0] to-[#b5b5b5] overflow-hidden pt-16">
-  <div class="grid lg:grid-cols-2 min-h-[calc(100vh-4rem)]">
-    <!-- left -->
-    <div class="flex flex-col justify-center px-8 sm:px-14 lg:px-20 py-16 relative z-10">
-      <div class="max-w-xl space-y-5">
+<!-- ========== HERO SECTION (Gray/Black Elegant) ========== -->
+<section id="home" class="min-h-screen bg-gradient-to-br from-[#d4d4d4] to-[#b0b0b0] overflow-hidden pt-16">
+  <div class="grid lg:grid-cols-2 min-h-screen">
+    
+    <!-- LEFT CONTENT -->
+    <div class="flex flex-col justify-center px-8 sm:px-14 lg:px-20 py-20 relative z-10">
+      <div class="max-w-xl space-y-4">
         <div class="inline-flex items-center gap-2 bg-black/10 backdrop-blur-sm px-4 py-1.5 rounded-full">
           <span class="relative flex h-2 w-2"><span class="animate-ping absolute h-full w-full rounded-full bg-green-600 opacity-75"></span><span class="relative rounded-full h-2 w-2 bg-green-700"></span></span>
-          <span class="text-black text-xs font-mono font-semibold tracking-wider">PORTFOLIO 2026</span>
+          <span class="text-black text-xs font-mono font-semibold">PORTFOLIO 2026</span>
         </div>
-        <p class="text-2xl md:text-3xl font-semibold text-black/80">Hi, I'm</p>
-        <h1 class="text-6xl sm:text-7xl lg:text-8xl font-extrabold text-black leading-[1.05] tracking-tighter">Masud <br>Rana Nayeem</h1>
-        <div class="text-xl sm:text-2xl text-gray-800 font-medium">Frontend Developer · Programmer</div>
-        <p class="text-gray-800/80 text-base max-w-md leading-relaxed">Building modern, responsive web experiences with a focus on performance and clean design.</p>
-        <div class="flex flex-wrap gap-4 pt-3">
+        <p class="text-2xl md:text-3xl font-semibold text-black">Hi, I'm</p>
+        <h1 class="text-6xl sm:text-7xl lg:text-8xl font-extrabold text-black leading-[1.1] tracking-tighter">Masud <br>Rana Nayeem</h1>
+        <div class="text-xl sm:text-2xl text-gray-800 font-medium">Frontend Developer | Programmer | Tech Enthusiast</div>
+        <p class="text-gray-800 text-base max-w-md leading-relaxed">Aspiring web developer focused on building modern, responsive web experiences and scalable applications.</p>
+        <div class="flex flex-wrap gap-4 pt-4">
           <a href="#education" class="px-8 py-3 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-all shadow-lg hover:-translate-y-1">Education</a>
           <a href="#contact-info" class="px-8 py-3 border-2 border-black text-black rounded-full font-semibold hover:bg-black hover:text-white transition-all">Contact</a>
         </div>
-        <div class="flex gap-4 pt-3">
-          <a href="#" class="w-11 h-11 rounded-full bg-white/90 shadow flex items-center justify-center hover:bg-white transition"><i class="fab fa-github text-black text-xl"></i></a>
-          <a href="#" class="w-11 h-11 rounded-full bg-white/90 shadow flex items-center justify-center hover:bg-white transition"><i class="fab fa-linkedin-in text-black text-xl"></i></a>
-          <a href="#" class="w-11 h-11 rounded-full bg-white/90 shadow flex items-center justify-center hover:bg-white transition"><i class="fas fa-envelope text-black text-xl"></i></a>
+        <div class="flex gap-4 pt-5">
+          <a href="https://github.com/masudrananayeem" target="_blank" class="w-11 h-11 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-100 transition"><i class="fab fa-github text-black text-xl"></i></a>
+          <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank" class="w-11 h-11 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-100 transition"><i class="fab fa-linkedin-in text-black text-xl"></i></a>
+          <a href="mailto:masudrananayeem86@gmail.com" class="w-11 h-11 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-100 transition"><i class="fas fa-envelope text-black text-xl"></i></a>
         </div>
       </div>
     </div>
-
-    <!-- right: circular profile with refined animations -->
+    
+    <!-- RIGHT SIDE - ANIMATED CIRCULAR PROFILE IMAGE -->
     <div class="relative bg-black flex items-center justify-center overflow-hidden">
-      <div class="absolute left-[-80px] top-0 w-56 h-full bg-[#d4d4d4] rotate-[7deg] origin-top opacity-60 hidden lg:block"></div>
+      <div class="absolute left-[-80px] top-0 w-56 h-full bg-[#d9d9d9] rotate-[7deg] origin-top opacity-80 hidden lg:block"></div>
+      
+      <!-- Animated Circular Profile -->
       <div class="relative z-10 my-12">
-        <!-- outer rotating gradient ring -->
-        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-pink-400 to-blue-400 animate-spin-slow" style="padding: 3px; mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude;"></div>
-        <!-- glow -->
+        <!-- Animated rotating gradient ring -->
+        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 animate-spin-slow" style="padding: 3px; mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude;"></div>
+        
+        <!-- Pulsing glow effect -->
         <div class="absolute inset-0 rounded-full bg-white/20 animate-pulse-glow -z-10"></div>
-        <!-- dashed ring -->
-        <div class="absolute -inset-4 rounded-full border-2 border-dashed border-gray-500/40 animate-spin-reverse"></div>
-        <div class="absolute -inset-8 rounded-full border border-gray-600/30 animate-spin-slow"></div>
-        <!-- image -->
-        <div class="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl relative z-10 bg-black">
-          <img src="image.jpeg" alt="Masud Rananayeem" class="w-full h-full max-w-none object-cover object-center hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/500x500/1a1a1a/white?text=MR'">
-        </div>
-        <!-- floating dots -->
+        
+        <!-- Rotating dashed border -->
+        <div class="absolute -inset-4 rounded-full border-2 border-dashed border-gray-500 animate-spin-reverse opacity-50"></div>
+        
+        <!-- Second rotating ring -->
+        <div class="absolute -inset-8 rounded-full border border-gray-700 animate-spin-slow opacity-30"></div>
+        
+        <!-- Circular Image -->
+<!-- Circular Image - Custom size and position -->
+<div class="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl relative z-10 bg-black">
+  <img 
+    src="image.jpeg" 
+    alt="Masud Rananayeem" 
+    class="w-full h-full max-w-none object-cover object-center scale-100 hover:scale-90 transition-transform duration-500"
+    style="margin: 0 auto;"
+    onerror="this.src='https://placehold.co/500x500/1a1a1a/white?text=MR'"
+  >
+</div>
+        
+        <!-- Floating particles around circle -->
         <div class="absolute -top-6 -right-6 w-3 h-3 bg-blue-400 rounded-full animate-float"></div>
-        <div class="absolute -bottom-4 -left-4 w-2.5 h-2.5 bg-purple-400 rounded-full animate-float-delay"></div>
+        <div class="absolute -bottom-4 -left-4 w-2 h-2 bg-purple-400 rounded-full animate-float-delay"></div>
         <div class="absolute top-1/2 -right-8 w-2 h-2 bg-pink-400 rounded-full animate-float2"></div>
         <div class="absolute bottom-1/3 -left-6 w-3 h-3 bg-cyan-400 rounded-full animate-float3"></div>
       </div>
     </div>
+    
   </div>
 </section>
 
-<!-- ===== SKILLS ===== -->
-<section id="skills" class="py-20 bg-[#0a0a0a] border-y border-gray-800/40">
+<!-- SKILLS SECTION -->
+<section id="skills" class="py-20 bg-[#0a0a0a] border-y border-gray-800/50">
   <div class="max-w-6xl mx-auto px-6 lg:px-12 text-center">
     <div class="fade-up">
       <span class="text-xs uppercase tracking-[6px] text-gray-500 font-mono">// tech arsenal</span>
-      <h2 class="text-5xl font-bold mt-2 gradient-text">Technical Skills</h2>
+      <h2 class="text-5xl font-bold mt-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Technical Skills</h2>
     </div>
     <div class="flex flex-wrap justify-center gap-3 mt-12 fade-up">
       <span class="skill-chip">HTML5/CSS3</span>
@@ -344,7 +453,7 @@
       <span class="skill-chip">Figma</span>
       <span class="skill-chip">REST APIs</span>
     </div>
-    <div class="mt-10 text-gray-400 text-sm flex justify-center gap-6 flex-wrap fade-up">
+    <div class="mt-8 text-gray-400 text-sm flex justify-center gap-6 flex-wrap fade-up">
       <span>React Mastery</span>
       <span>JavaScript Deep Dive</span>
       <span>Backend (Node.js)</span>
@@ -353,76 +462,79 @@
   </div>
 </section>
 
-<!-- ===== PROJECTS ===== -->
+<!-- PROJECTS SECTION -->
 <section id="projects" class="py-24 bg-black">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
     <div class="text-center mb-14 fade-up">
       <span class="text-xs uppercase tracking-[6px] text-gray-500 font-mono">// featured creations</span>
-      <h2 class="text-5xl font-bold mt-2 gradient-text">Featured Projects</h2>
+      <h2 class="text-5xl font-bold mt-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Featured Projects</h2>
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-      <!-- 1 -->
-      <div class="project-card fade-up">
-        <div class="thumb"><i class="fas fa-globe text-4xl text-gray-500"></i></div>
-        <div class="p-6"><h3 class="text-xl font-bold">Portfolio Website</h3><p class="text-gray-400 text-sm mt-1">Personal portfolio built with React and Tailwind CSS.</p><div class="flex gap-2 mt-4"><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">React</span><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">Tailwind</span></div></div>
+      <!-- Project 1 -->
+      <div class="bg-[#0c0c0c] rounded-2xl border border-gray-800 overflow-hidden transition-all hover:-translate-y-2 hover:border-gray-600 fade-up">
+        <div class="h-44 bg-gradient-to-br from-[#1a1a1a] to-black flex items-center justify-center"><i class="fas fa-globe text-5xl text-gray-500"></i></div>
+        <div class="p-5"><h3 class="text-xl font-bold">Portfolio Website</h3><p class="text-gray-400 text-sm mt-1">Personal portfolio website built with React and Tailwind CSS showcasing projects and skills</p><div class="flex gap-2 mt-3"><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">React</span><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">Tailwind</span></div></div>
       </div>
-      <!-- 2 -->
-      <div class="project-card fade-up">
-        <div class="thumb"><i class="fas fa-handshake text-4xl text-gray-500"></i></div>
-        <div class="p-6"><h3 class="text-xl font-bold">SkillSwap Platform</h3><p class="text-gray-400 text-sm mt-1">MERN stack collaborative learning with real-time chat.</p><div class="flex gap-2 mt-4"><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">MERN</span><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">Socket.io</span></div></div>
+      <!-- Project 2 -->
+      <div class="bg-[#0c0c0c] rounded-2xl border border-gray-800 overflow-hidden transition-all hover:-translate-y-2 hover:border-gray-600 fade-up">
+        <div class="h-44 bg-gradient-to-br from-[#1a1a1a] to-black flex items-center justify-center"><i class="fas fa-handshake text-5xl text-gray-500"></i></div>
+        <div class="p-5"><h3 class="text-xl font-bold">SkillSwap Platform</h3><p class="text-gray-400 text-sm mt-1">MERN stack collaborative learning platform with real-time chat using Socket.io</p><div class="flex gap-2 mt-3"><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">MERN</span><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">Socket.io</span></div></div>
       </div>
-      <!-- 3 -->
-      <div class="project-card fade-up">
-        <div class="thumb"><i class="fas fa-mug-hot text-4xl text-gray-500"></i></div>
-        <div class="p-6"><h3 class="text-xl font-bold">Cafe Verse</h3><p class="text-gray-400 text-sm mt-1">Elegant tea & coffee shop landing page.</p><div class="flex gap-2 mt-4"><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">HTML/CSS</span><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">Tailwind</span></div></div>
+      <!-- Project 3 -->
+      <div class="bg-[#0c0c0c] rounded-2xl border border-gray-800 overflow-hidden transition-all hover:-translate-y-2 hover:border-gray-600 fade-up">
+        <div class="h-44 bg-gradient-to-br from-[#1a1a1a] to-black flex items-center justify-center"><i class="fas fa-mug-hot text-5xl text-gray-500"></i></div>
+        <div class="p-5"><h3 class="text-xl font-bold">Cafe Verse</h3><p class="text-gray-400 text-sm mt-1">Modern and elegant tea and coffee shop landing page with responsive design</p><div class="flex gap-2 mt-3"><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">HTML/CSS</span><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">Tailwind</span></div></div>
       </div>
-      <!-- 4 -->
-      <div class="project-card fade-up">
-        <div class="thumb"><i class="fas fa-chart-line text-4xl text-gray-500"></i></div>
-        <div class="p-6"><h3 class="text-xl font-bold">Velocita Moto</h3><p class="text-gray-400 text-sm mt-1">Analytics dashboard with Chart.js.</p><div class="flex gap-2 mt-4"><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">React</span><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">Chart.js</span></div></div>
+      <!-- Project 4 -->
+      <div class="bg-[#0c0c0c] rounded-2xl border border-gray-800 overflow-hidden transition-all hover:-translate-y-2 hover:border-gray-600 fade-up">
+        <div class="h-44 bg-gradient-to-br from-[#1a1a1a] to-black flex items-center justify-center"><i class="fas fa-chart-line text-5xl text-gray-500"></i></div>
+        <div class="p-5"><h3 class="text-xl font-bold">Velocita Moto</h3><p class="text-gray-400 text-sm mt-1">Analytics dashboard for tracking social media growth and engagement using Chart.js</p><div class="flex gap-2 mt-3"><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">React</span><span class="text-xs bg-[#1a1a1a] px-3 py-1 rounded-full">Chart.js</span></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== EDUCATION + CONTACT ===== -->
-<section id="education" class="py-24 bg-[#0a0a0a]">
+<!-- EDUCATION + CONTACT SECTION -->
+<section id="education" class="py-24 bg-black">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
     <div class="text-center mb-14 fade-up">
       <span class="text-xs uppercase tracking-[6px] text-gray-500 font-mono">// background & connect</span>
-      <h2 class="text-5xl font-bold mt-2 gradient-text">Information Hub</h2>
+      <h2 class="text-5xl font-bold mt-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Information Hub</h2>
     </div>
+    
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 fade-up">
-      <!-- Education -->
-      <div class="glass-card p-6">
+      <!-- Education Card -->
+      <div class="info-card p-6">
         <h3><i class="fas fa-graduation-cap text-gray-300"></i> Education</h3>
         <ul>
-          <li><i class="fas fa-university"></i> <strong>BSc in CSE</strong><br>Daffodil International University<br><span class="text-gray-400 text-sm">Jan 2023 – Dec 2026</span></li>
-          <li><i class="fas fa-school"></i> <strong>HSC</strong><br>RDA Laboratory School & College<br><span class="text-gray-400">2020–2021 · GPA: 5.00</span></li>
-          <li><i class="fas fa-school"></i> <strong>SSC</strong><br>Bogura Cantonment Board High School<br><span class="text-gray-400">2007–2019 · Grade: 4.89</span></li>
+          <li><i class="fas fa-university"></i> <strong>Bachelor of Science in CSE</strong><br>Daffodil International University<br><span class="text-gray-400 text-sm">Jan 2023 – Dec 2026</span></li>
+          <li><i class="fas fa-school"></i> <strong>Higher Secondary Certificate (HSC)</strong><br>Rural Development Academy (RDA) Laboratory School & College<br><span class="text-gray-400">2020 – 2021 · GPA: 5.00</span></li>
+          <li><i class="fas fa-school"></i> <strong>Secondary School Certificate (SSC)</strong><br>Bogura Cantonment Board High School<br><span class="text-gray-400">2007 – 2019 · Grade: 4.89</span></li>
         </ul>
       </div>
-      <!-- Connect -->
-      <div class="glass-card p-6" id="contact-info">
+      
+      <!-- Connect Card (Contact info) -->
+      <div class="info-card p-6" id="contact-info">
         <h3><i class="fas fa-paper-plane"></i> Connect</h3>
         <ul>
           <li><i class="fas fa-phone-alt"></i> <a href="tel:+8801820050464">+8801820050464</a></li>
           <li><i class="fas fa-envelope"></i> <a href="mailto:masudrananayeem86@gmail.com">masudrananayeem86@gmail.com</a></li>
-          <li><i class="fab fa-github"></i> <a href="#">github.com/masudrananayeem</a></li>
-          <li><i class="fab fa-linkedin"></i> <a href="#">linkedin.com/in/masudrananayeem</a></li>
+          <li><i class="fab fa-github"></i> <a href="https://github.com/masudrananayeem" target="_blank">github.com/masudrananayeem</a></li>
+          <li><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank">linkedin.com/in/masudrananayeem</a></li>
         </ul>
       </div>
-      <!-- About -->
-      <div class="glass-card p-6">
+      
+      <!-- More About Me Card -->
+      <div class="info-card p-6">
         <h3><i class="fas fa-user-astronaut"></i> About Me</h3>
         <ul>
           <li><i class="fas fa-chart-line"></i> Aspiring Web Developer & Programmer</li>
-          <li><i class="fas fa-pencil-ruler"></i> Tech Enthusiast · modern web technologies</li>
-          <li><i class="fas fa-file-code"></i> Building responsive, user-friendly apps</li>
-          <li><i class="fas fa-brain"></i> Currently: Advanced React & Backend</li>
-          <li><i class="fas fa-flag-checkered"></i> 2026 Goal: Full-Stack Developer</li>
+          <li><i class="fas fa-pencil-ruler"></i> Tech Enthusiast focused on modern web technologies</li>
+          <li><i class="fas fa-file-code"></i> Building responsive and user-friendly applications</li>
+          <li><i class="fas fa-brain"></i> Currently exploring: Advanced React & Backend technologies</li>
+          <li><i class="fas fa-flag-checkered"></i> 2026 Goal: Professional Full-Stack Developer</li>
         </ul>
-        <div class="mt-4 flex flex-wrap gap-2">
+        <div class="mt-4 pt-2 flex flex-wrap gap-2">
           <span class="skill-chip">Web Development</span>
           <span class="skill-chip">Open Source</span>
         </div>
@@ -431,16 +543,16 @@
   </div>
 </section>
 
-<!-- ===== FOOTER (updated) ===== -->
+<!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-container">
     <div class="footer-col">
       <h4>Masud Rana Nayeem</h4>
       <ul>
         <li><i class="fas fa-map-pin"></i> CSE 4th Year, DIU</li>
-        <li><i class="fas fa-code"></i> Frontend Developer</li>
+        <li><i class="fas fa-code"></i> Frontend Developer | Programmer</li>
         <li><i class="fas fa-award"></i> Tech Enthusiast</li>
-        <li><i class="fas fa-brain"></i> Future Full-Stack</li>
+        <li><i class="fas fa-brain"></i> Future Full-Stack Developer</li>
       </ul>
     </div>
     <div class="footer-col">
@@ -456,22 +568,22 @@
     <div class="footer-col">
       <h4>Projects</h4>
       <ul>
-        <li><a href="#"><i class="fab fa-github"></i> Velocita Moto</a></li>
-        <li><a href="#"><i class="fas fa-globe"></i> Portfolio</a></li>
-        <li><a href="#"><i class="fas fa-mug-hot"></i> Cafe Verse</a></li>
-        <li><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a href="#" target="_blank"><i class="fab fa-github"></i> Velocita Moto</a></li>
+        <li><a href="#" target="_blank"><i class="fas fa-globe"></i> Portfolio</a></li>
+        <li><a href="#" target="_blank"><i class="fas fa-mug-hot"></i> Cafe Verse</a></li>
+        <li><a href="#" target="_blank"><i class="fas fa-chart-line"></i> Dashboard</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Connect</h4>
       <div class="footer-social">
-        <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://github.com/masudrananayeem" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
       </div>
-      <p style="margin-top:25px;"><i class="fas fa-envelope" style="color:#9c8bcb;"></i> <a href="mailto:masudrananayeem86@gmail.com" style="color:#b8a3d9;">masudrananayeem86@gmail.com</a></p>
-      <p style="margin-top:12px; font-size:12px;"><i class="fas fa-phone-alt"></i> +880 1820-050464</p>
+      <p style="margin-top: 25px;"><i class="fas fa-envelope" style="color: #9c8bcb;"></i> <a href="mailto:masudrananayeem86@gmail.com" style="color: #b8a3d9;">masudrananayeem86@gmail.com</a></p>
+      <p style="margin-top: 12px; font-size: 12px;"><i class="fas fa-phone-alt"></i> +880 1820-050464</p>
     </div>
   </div>
   <div class="footer-bottom">
@@ -479,22 +591,27 @@
   </div>
 </footer>
 
-<!-- ===== SCRIPTS ===== -->
 <script>
-  // intersection observer for fade-up
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('show');
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+  }, { threshold: 0.1, rootMargin: "0px 0px -20px 0px" });
+  
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-  // mobile menu
+  
+  // Mobile menu toggle
   const menuBtn = document.getElementById('mobileMenuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
+  
   if (menuBtn && mobileMenu) {
-    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
   }
 </script>
+
 </body>
 </html>
