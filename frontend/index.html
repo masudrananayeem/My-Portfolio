@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nayeem | Full Stack Developer Portfolio</title>
+<meta name="description" content="Nayeem — Full Stack Developer specializing in the MERN stack. Explore projects, skills, certificates, and get in touch.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Nayeem | Full Stack Developer">
+<meta property="og:description" content="Full Stack Developer portfolio — React, Node.js, Express, MongoDB.">
+<meta property="og:type" content="website">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+</head>
+<body>
+
+<div id="loader"><div class="loader-ring"></div></div>
+<canvas id="bg-canvas"></canvas>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
+<div id="section-dots"></div>
+<div id="toast" class="glass-card px-5 py-3 text-sm font-medium"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar fixed top-0 left-0 w-full z-50 py-4">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex justify-between items-center">
+    <a href="#home" class="font-display text-2xl font-bold text-white cursor-hoverable">Nayeem<span class="text-gradient">.dev</span></a>
+    <div class="hidden lg:flex gap-8 text-sm font-medium">
+      <a href="#home" class="nav-link cursor-hoverable text-gray-300 hover:text-white">Home</a>
+      <a href="#about" class="nav-link cursor-hoverable text-gray-300 hover:text-white">About</a>
+      <a href="#skills" class="nav-link cursor-hoverable text-gray-300 hover:text-white">Skills</a>
+      <a href="#projects" class="nav-link cursor-hoverable text-gray-300 hover:text-white">Projects</a>
+      <a href="#certificates" class="nav-link cursor-hoverable text-gray-300 hover:text-white">Certificates</a>
+      <a href="blog.html" class="nav-link cursor-hoverable text-gray-300 hover:text-white">Blog</a>
+      <a href="#contact" class="nav-link cursor-hoverable text-gray-300 hover:text-white">Contact</a>
+    </div>
+    <div class="hidden lg:flex items-center gap-3">
+      <a href="login.html" class="text-gray-400 hover:text-white text-sm cursor-hoverable" title="Admin Dashboard"><i class="fas fa-lock"></i></a>
+      <a href="#contact" class="glow-btn px-5 py-2.5 rounded-full text-sm cursor-hoverable">Hire Me</a>
+    </div>
+    <i class="fas fa-bars text-white text-xl lg:hidden cursor-pointer" id="mobileMenuBtn"></i>
+  </div>
+  <div id="mobileMenu" class="lg:hidden hidden bg-black/95 mt-4 py-4 px-6 flex flex-col gap-3 border-t border-white/10">
+    <a href="#home" class="text-gray-300 py-1">Home</a>
+    <a href="#about" class="text-gray-300 py-1">About</a>
+    <a href="#skills" class="text-gray-300 py-1">Skills</a>
+    <a href="#projects" class="text-gray-300 py-1">Projects</a>
+    <a href="#certificates" class="text-gray-300 py-1">Certificates</a>
+    <a href="blog.html" class="text-gray-300 py-1">Blog</a>
+    <a href="#contact" class="text-gray-300 py-1">Contact</a>
+    <a href="login.html" class="text-gray-300 py-1">Admin Dashboard</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section id="home" class="min-h-screen flex items-center pt-24 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-10 items-center w-full">
+      <div class="reveal-up">
+        <div class="inline-flex items-center gap-2 glass-card px-4 py-1.5 mb-6 cursor-hoverable">
+          <span class="relative flex h-2 w-2"><span class="animate-ping absolute h-full w-full rounded-full bg-cyan-400 opacity-75"></span><span class="relative rounded-full h-2 w-2 bg-cyan-400"></span></span>
+          <span class="text-xs font-mono text-cyan-200">Available for freelance work</span>
+        </div>
+        <p class="text-gray-400 text-lg mb-2">Hi, I'm</p>
+        <h1 class="font-display text-6xl sm:text-7xl font-bold text-white leading-[1.05]">Nayeem</h1>
+        <div class="font-display text-2xl sm:text-3xl mt-3 text-gradient" id="typed-role">Full Stack Developer</div>
+        <p class="text-gray-400 mt-5 max-w-lg leading-relaxed">I design and build fast, scalable web applications end-to-end — from pixel-perfect interfaces to production-grade APIs.</p>
+        <div class="flex flex-wrap gap-4 mt-8">
+          <a href="resume.pdf" download class="glow-btn px-7 py-3 rounded-full cursor-hoverable"><i class="fas fa-download mr-2"></i>Download CV</a>
+          <a href="#contact" class="outline-btn px-7 py-3 rounded-full cursor-hoverable">Hire Me</a>
+          <a href="#projects" class="outline-btn px-7 py-3 rounded-full cursor-hoverable">View Projects</a>
+        </div>
+        <div class="flex gap-4 mt-8">
+          <a href="https://github.com/" target="_blank" class="w-11 h-11 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fab fa-github"></i></a>
+          <a href="https://linkedin.com/" target="_blank" class="w-11 h-11 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fab fa-linkedin-in"></i></a>
+          <a href="mailto:hello@nayeem.dev" class="w-11 h-11 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+
+      <!-- Three.js scene -->
+      <div id="three-hero" class="h-[420px] lg:h-[560px] relative reveal-fade"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="text-center mb-16 reveal-up">
+        <span class="section-eyebrow">// ABOUT ME</span>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Who I Am</h2>
+      </div>
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div class="glass-card p-8 reveal-up">
+          <h3 class="font-display text-xl text-white mb-4">Bio</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">I'm a full stack developer focused on building performant, accessible, and visually refined web applications using the MERN stack. I care about clean architecture as much as clean design.</p>
+          <div class="grid grid-cols-2 gap-4 mt-6 text-sm text-gray-400">
+            <p><i class="fas fa-location-dot text-cyan-300 mr-2"></i>Dhaka, Bangladesh</p>
+            <p><i class="fas fa-circle text-green-400 mr-2 text-[8px]"></i>Available now</p>
+            <p><i class="fas fa-language text-cyan-300 mr-2"></i>English, Bangla</p>
+            <p><i class="fas fa-envelope text-cyan-300 mr-2"></i>hello@nayeem.dev</p>
+          </div>
+        </div>
+
+        <div class="glass-card p-8 reveal-up">
+          <h3 class="font-display text-xl text-white mb-4">Timeline</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="border-l-2 border-cyan-400/50 pl-4">
+              <p class="text-white font-medium">B.Sc. in CSE</p>
+              <p class="text-gray-500">Daffodil International University · 2023 – 2026</p>
+            </li>
+            <li class="border-l-2 border-purple-400/50 pl-4">
+              <p class="text-white font-medium">Freelance Full Stack Developer</p>
+              <p class="text-gray-500">Self-employed · 2024 – Present</p>
+            </li>
+            <li class="border-l-2 border-cyan-400/50 pl-4">
+              <p class="text-white font-medium">Frontend Developer Intern</p>
+              <p class="text-gray-500">Remote · 2023</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="glass-card p-8 reveal-up">
+          <h3 class="font-display text-xl text-white mb-4">By the Numbers</h3>
+          <div class="grid grid-cols-2 gap-6 text-center">
+            <div><p class="font-display text-4xl text-gradient"><span class="counter" data-target="3">0</span>+</p><p class="text-xs text-gray-500 mt-1">Years Experience</p></div>
+            <div><p class="font-display text-4xl text-gradient"><span class="counter" data-target="24">0</span>+</p><p class="text-xs text-gray-500 mt-1">Projects Done</p></div>
+            <div><p class="font-display text-4xl text-gradient"><span class="counter" data-target="12">0</span>+</p><p class="text-xs text-gray-500 mt-1">Happy Clients</p></div>
+            <div><p class="font-display text-4xl text-gradient"><span class="counter" data-target="8">0</span>+</p><p class="text-xs text-gray-500 mt-1">Certificates</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="text-center mb-16 reveal-up">
+        <span class="section-eyebrow">// TECH ARSENAL</span>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Skills &amp; Tools</h2>
+      </div>
+      <div id="skills-grid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-10"></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="text-center mb-10 reveal-up">
+        <span class="section-eyebrow">// FEATURED WORK</span>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Projects</h2>
+      </div>
+
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10 reveal-up">
+        <div id="project-filters" class="flex flex-wrap gap-3">
+          <button data-filter="All" class="glow-btn px-4 py-2 rounded-full text-xs cursor-hoverable">All</button>
+          <button data-filter="Full Stack" class="outline-btn px-4 py-2 rounded-full text-xs cursor-hoverable">Full Stack</button>
+          <button data-filter="Frontend" class="outline-btn px-4 py-2 rounded-full text-xs cursor-hoverable">Frontend</button>
+          <button data-filter="Backend" class="outline-btn px-4 py-2 rounded-full text-xs cursor-hoverable">Backend</button>
+        </div>
+        <div class="relative w-full md:w-72">
+          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+          <input id="project-search" type="text" placeholder="Search projects…" class="w-full glass-card pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none">
+        </div>
+      </div>
+
+      <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATES -->
+  <section id="certificates" class="py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="text-center mb-16 reveal-up">
+        <span class="section-eyebrow">// PROOF OF WORK</span>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Certificates</h2>
+      </div>
+      <div id="certificates-grid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <p class="text-gray-500 col-span-full text-center">Certificates added from the admin dashboard will appear here automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="py-24 border-t border-white/5">
+    <div class="max-w-5xl mx-auto px-6 lg:px-10">
+      <div class="text-center mb-14 reveal-up">
+        <span class="section-eyebrow">// GET IN TOUCH</span>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Let's Work Together</h2>
+      </div>
+      <div class="glass-card gradient-border p-8 sm:p-12 reveal-up">
+        <form id="contact-form" class="grid md:grid-cols-2 gap-6">
+          <input name="name" required placeholder="Your Name" class="glass-card px-5 py-3.5 text-white placeholder-gray-500 outline-none focus:border-cyan-400/50">
+          <input name="email" type="email" required placeholder="Your Email" class="glass-card px-5 py-3.5 text-white placeholder-gray-500 outline-none focus:border-cyan-400/50">
+          <input name="subject" required placeholder="Subject" class="md:col-span-2 glass-card px-5 py-3.5 text-white placeholder-gray-500 outline-none focus:border-cyan-400/50">
+          <textarea name="message" required rows="5" placeholder="Your Message" class="md:col-span-2 glass-card px-5 py-3.5 text-white placeholder-gray-500 outline-none focus:border-cyan-400/50"></textarea>
+          <button type="submit" class="md:col-span-2 glow-btn py-4 rounded-full font-semibold cursor-hoverable">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/5 py-12">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-6">
+    <p class="font-display text-white">Nayeem<span class="text-gradient">.dev</span></p>
+    <div class="flex gap-5 text-gray-400">
+      <a href="https://github.com/" target="_blank" class="hover:text-cyan-300 cursor-hoverable"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/" target="_blank" class="hover:text-cyan-300 cursor-hoverable"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://leetcode.com/" target="_blank" class="hover:text-cyan-300 cursor-hoverable"><i class="fas fa-code"></i></a>
+      <a href="https://twitter.com/" target="_blank" class="hover:text-cyan-300 cursor-hoverable"><i class="fab fa-twitter"></i></a>
+    </div>
+    <p class="text-gray-500 text-sm">© 2026 Nayeem. All rights reserved.</p>
+    <a href="#home" class="w-10 h-10 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fas fa-arrow-up"></i></a>
+  </div>
+</footer>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/animations.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

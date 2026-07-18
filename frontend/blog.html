@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog | Nayeem</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+<div id="loader"><div class="loader-ring"></div></div>
+<canvas id="bg-canvas"></canvas>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
+<div id="toast" class="glass-card px-5 py-3 text-sm font-medium"></div>
+
+<nav class="navbar fixed top-0 left-0 w-full z-50 py-4">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex justify-between items-center">
+    <a href="index.html" class="font-display text-2xl font-bold text-white cursor-hoverable">Nayeem<span class="text-gradient">.dev</span></a>
+    <a href="index.html" class="outline-btn px-5 py-2.5 rounded-full text-sm cursor-hoverable"><i class="fas fa-arrow-left mr-2"></i>Back Home</a>
+  </div>
+</nav>
+
+<main class="pt-32 pb-24 max-w-6xl mx-auto px-6 lg:px-10">
+  <div class="text-center mb-14">
+    <span class="section-eyebrow">// WRITING</span>
+    <h1 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Blog</h1>
+  </div>
+
+  <div class="relative max-w-md mx-auto mb-12">
+    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+    <input id="blog-search" type="text" placeholder="Search articles…" class="w-full glass-card pl-10 pr-4 py-3 text-sm text-white placeholder-gray-500 outline-none">
+  </div>
+
+  <div id="blog-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+    <p class="text-gray-500 col-span-full text-center py-10">Loading articles…</p>
+  </div>
+</main>
+
+<footer class="border-t border-white/5 py-10 text-center text-gray-500 text-sm">
+  © 2026 Nayeem. All rights reserved.
+</footer>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/animations.js"></script>
+<script>
+let blogSearch = '';
+
+async function loadBlogs() {
+  const grid = document.getElementById('blog-grid');
+  try {
+    const params = new URLSearchParams();
+    if (blogSearch) params.set('search', blogSearch);
+    const res = await api.getBlogs(`?${params.toString()}`);
+    if (!res.data.length) {
+      grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">No articles published yet. Add one from the admin dashboard.</p>`;
+      return;
+    }
+    grid.innerHTML = res.data.map(b => `
+      <a href="blog.html?slug=${b.slug}" class="glass-card overflow-hidden block group cursor-hoverable">
+        <div class="h-44 overflow-hidden bg-white/5">
+          <img src="${b.coverImage || 'https://placehold.co/600x400/111827/00f5ff?text=Blog'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+        </div>
+        <div class="p-5">
+          <span class="text-xs text-cyan-300 font-mono">${b.category}</span>
+          <h3 class="text-lg font-semibold text-white mt-1">${b.title}</h3>
+          <p class="text-sm text-gray-400 mt-2 line-clamp-2">${b.excerpt}</p>
+          <p class="text-xs text-gray-500 mt-3"><i class="fas fa-eye mr-1"></i>${b.views} views · ${new Date(b.createdAt).toLocaleDateString()}</p>
+        </div>
+      </a>
+    `).join('');
+  } catch (err) {
+    grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">Couldn't load articles — check that the backend is running.</p>`;
+  }
+}
+
+async function loadSinglePost(slug) {
+  const main = document.querySelector('main');
+  try {
+    const res = await api.getBlog(slug);
+    const b = res.data;
+    document.title = `${b.title} | Nayeem`;
+    main.innerHTML = `
+      <a href="blog.html" class="outline-btn px-5 py-2.5 rounded-full text-sm cursor-hoverable inline-block mb-8"><i class="fas fa-arrow-left mr-2"></i>All Articles</a>
+      <span class="text-xs text-cyan-300 font-mono">${b.category}</span>
+      <h1 class="font-display text-4xl font-bold text-white mt-2 mb-6">${b.title}</h1>
+      <img src="${b.coverImage || 'https://placehold.co/1200x500/111827/00f5ff?text=Blog'}" class="w-full h-80 object-cover rounded-2xl mb-8">
+      <div class="glass-card p-8 prose prose-invert max-w-none text-gray-300 leading-relaxed whitespace-pre-wrap">${b.content}</div>
+      <div class="glass-card p-8 mt-8">
+        <h2 class="font-display text-xl text-white mb-4">Comments (${b.comments.length})</h2>
+        <div class="space-y-4 mb-6" id="comments-list">
+          ${b.comments.map(c => `<div class="border-b border-white/5 pb-3"><p class="text-white text-sm font-medium">${c.name}</p><p class="text-gray-400 text-sm">${c.message}</p></div>`).join('') || '<p class="text-gray-500 text-sm">No comments yet — be the first!</p>'}
+        </div>
+        <form id="comment-form" class="space-y-3">
+          <div class="grid sm:grid-cols-2 gap-3">
+            <input name="name" required placeholder="Name" class="glass-card px-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none">
+            <input name="email" type="email" required placeholder="Email" class="glass-card px-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none">
+          </div>
+          <textarea name="message" required rows="3" placeholder="Write a comment…" class="w-full glass-card px-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none"></textarea>
+          <button type="submit" class="glow-btn px-6 py-2.5 rounded-full text-sm cursor-hoverable">Post Comment</button>
+        </form>
+      </div>
+    `;
+    document.getElementById('comment-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      try {
+        await api.addComment(slug, {
+          name: form.name.value, email: form.email.value, message: form.message.value,
+        });
+        showToast('Comment posted!');
+        loadSinglePost(slug);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+  } catch (err) {
+    main.innerHTML = `<p class="text-gray-500 text-center py-20">Article not found.</p>`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const slug = new URLSearchParams(window.location.search).get('slug');
+  if (slug) {
+    loadSinglePost(slug);
+  } else {
+    loadBlogs();
+    let debounce;
+    document.getElementById('blog-search').addEventListener('input', (e) => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => { blogSearch = e.target.value.trim(); loadBlogs(); }, 350);
+    });
+  }
+});
+</script>
+</body>
+</html>
