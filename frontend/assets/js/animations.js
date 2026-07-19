@@ -39,8 +39,8 @@ function initCustomCursor() {
   });
 
   const animateRing = () => {
-    ringX += (mouseX - ringX) * 0.18;
-    ringY += (mouseY - ringY) * 0.18;
+    ringX += (mouseX - ringX) * 0.14;
+    ringY += (mouseY - ringY) * 0.14;
     ring.style.left = `${ringX}px`;
     ring.style.top = `${ringY}px`;
     requestAnimationFrame(animateRing);
@@ -112,21 +112,27 @@ function initGsapReveals() {
   gsap.registerPlugin(ScrollTrigger);
 
   gsap.utils.toArray('.reveal-up').forEach((el) => {
-    gsap.to(el, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' },
-    });
+    if (el.dataset.revealed === 'true') return;
+    gsap.fromTo(el,
+      { opacity: 0, y: 46, scale: 0.98 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 1.1,
+        ease: 'expo.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        onStart: () => { el.dataset.revealed = 'true'; },
+      }
+    );
   });
 
   gsap.utils.toArray('.reveal-fade').forEach((el) => {
+    if (el.dataset.revealed === 'true') return;
     gsap.to(el, {
       opacity: 1,
-      duration: 1.2,
+      duration: 1.4,
       ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 90%' },
+      scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+      onStart: () => { el.dataset.revealed = 'true'; },
     });
   });
 
@@ -159,7 +165,11 @@ function initGsapReveals() {
 
 /* ---------- Lenis smooth scroll ---------- */
 function initLenisSmoothScroll() {
-  const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+  const lenis = new Lenis({
+    duration: 1.35,
+    smoothWheel: true,
+    easing: (t) => 1 - Math.pow(1 - t, 4),
+  });
   function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);

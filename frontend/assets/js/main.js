@@ -7,9 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypedHero();
   initThreeScene();
   renderSkills();
+  renderSkillsPreview();
   loadProjects();
+  loadFeaturedProjects();
   initProjectFilters();
   initContactForm();
+  animateCounters();
 });
 
 /* ---------- Typed.js hero role text ---------- */
@@ -17,7 +20,7 @@ function initTypedHero() {
   const el = document.getElementById('typed-role');
   if (!el || typeof Typed === 'undefined') return;
   new Typed('#typed-role', {
-    strings: ['Full Stack Developer', 'MERN Stack Engineer', 'UI/UX Enthusiast', 'Problem Solver'],
+    strings: ['Frontend Developer', 'Programmer', 'Tech Enthusiast', 'Aspiring Full Stack Developer'],
     typeSpeed: 55,
     backSpeed: 30,
     backDelay: 1400,
@@ -40,7 +43,7 @@ function initThreeScene() {
   container.appendChild(renderer.domElement);
 
   const group = new THREE.Group();
-  const colors = [0x00f5ff, 0xa855f7, 0x22d3ee];
+  const colors = [0x1E8EB3, 0x16407a, 0x4fb3d1];
 
   for (let i = 0; i < 10; i++) {
     const size = Math.random() * 0.9 + 0.4;
@@ -96,51 +99,92 @@ function initThreeScene() {
 
 /* ---------- Skills data + render ---------- */
 const SKILLS = {
-  Frontend: [
-    { name: 'HTML5 / CSS3', level: 95 }, { name: 'JavaScript (ES6+)', level: 90 },
-    { name: 'React.js', level: 88 }, { name: 'Tailwind CSS', level: 92 }, { name: 'GSAP', level: 80 },
-  ],
-  Backend: [
-    { name: 'Node.js', level: 88 }, { name: 'Express.js', level: 87 }, { name: 'REST APIs', level: 90 },
-  ],
-  Database: [
-    { name: 'MongoDB', level: 85 }, { name: 'Mongoose', level: 85 },
-  ],
-  Tools: [
-    { name: 'Git / GitHub', level: 90 }, { name: 'Figma', level: 75 }, { name: 'Vercel / Render', level: 82 },
-  ],
+  Frontend: ['HTML5/CSS3', 'JavaScript (ES6+)', 'React.js', 'Tailwind CSS'],
+  Backend: ['Node.js', 'Express.js', 'REST APIs'],
+  Database: ['MongoDB'],
+  Tools: ['Git/GitHub', 'Figma'],
 };
+
+const CURRENTLY_LEARNING = ['React Mastery', 'JavaScript Deep Dive', 'Backend (Node.js)', 'MongoDB & APIs'];
 
 function renderSkills() {
   const wrap = document.getElementById('skills-grid');
-  if (!wrap) return;
+  if (wrap) {
+    Object.entries(SKILLS).forEach(([category, list]) => {
+      const col = document.createElement('div');
+      col.className = 'reveal-up';
+      col.innerHTML = `
+        <h3 class="font-display text-lg text-white mb-4 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>${category}
+        </h3>
+        <div class="flex flex-wrap gap-3">
+          ${list.map((s) => `<span class="skill-card px-4 py-2 text-sm text-gray-200 cursor-hoverable inline-block">${s}</span>`).join('')}
+        </div>
+      `;
+      wrap.appendChild(col);
+    });
+  }
 
-  Object.entries(SKILLS).forEach(([category, list]) => {
-    const col = document.createElement('div');
-    col.className = 'reveal-up';
-    col.innerHTML = `
-      <h3 class="font-display text-lg text-white mb-4 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>${category}
-      </h3>
-      <div class="space-y-5">
-        ${list.map((s) => `
-          <div class="skill-card p-4 cursor-hoverable">
-            <div class="flex justify-between text-sm mb-2">
-              <span class="text-gray-200">${s.name}</span>
-              <span class="text-cyan-300 font-mono">${s.level}%</span>
-            </div>
-            <div class="skill-bar-track">
-              <div class="skill-bar-fill" data-level="${s.level}"></div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    wrap.appendChild(col);
-  });
+  const learningWrap = document.getElementById('learning-list');
+  if (learningWrap) {
+    learningWrap.innerHTML = CURRENTLY_LEARNING.map((c) => `<span class="skill-card px-4 py-2 text-sm text-gray-300 cursor-hoverable inline-block">${c}</span>`).join('');
+  }
 
-  // Re-run reveal + skill bar observers now that content exists
+  // Re-run reveal observers now that content exists
   if (typeof initGsapReveals === 'function') initGsapReveals();
+}
+
+/* ---------- Homepage highlight: flat skills preview chips ---------- */
+function renderSkillsPreview() {
+  const wrap = document.getElementById('skills-preview');
+  if (!wrap) return;
+  const flat = Object.values(SKILLS).flat();
+  wrap.innerHTML = flat.map((s) => `<span class="skill-card px-4 py-2 text-sm text-gray-200 cursor-hoverable inline-block">${s}</span>`).join('');
+}
+
+/* ---------- Homepage highlight: a few featured projects only ---------- */
+async function loadFeaturedProjects() {
+  const grid = document.getElementById('featured-projects-grid');
+  if (!grid) return;
+  grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">Loading projects…</p>`;
+  try {
+    const res = await api.getProjects('?featured=true&limit=3');
+    const list = res.data && res.data.length ? res.data : (await api.getProjects('?limit=3')).data;
+    if (!list.length) {
+      grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">No projects yet.</p>`;
+      return;
+    }
+    grid.innerHTML = list.map((p) => `
+      <a href="project-details.html?slug=${p.slug}" class="glass-card gradient-border overflow-hidden block group cursor-hoverable reveal-up">
+        <div class="h-48 overflow-hidden">
+          <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" onerror="this.src='https://placehold.co/600x400/111827/1E8EB3?text=${encodeURIComponent(p.title)}'">
+        </div>
+        <div class="p-5">
+          <span class="text-xs text-cyan-300 font-mono">${p.category}</span>
+          <h3 class="text-lg font-semibold text-white mt-1">${p.title}</h3>
+          <p class="text-sm text-gray-400 mt-2 line-clamp-2">${p.description}</p>
+        </div>
+      </a>
+    `).join('');
+    if (typeof initGsapReveals === 'function') initGsapReveals();
+  } catch (err) {
+    grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">Couldn't load projects from the API yet.</p>`;
+  }
+}
+
+/* ---------- Homepage stat counters ---------- */
+function animateCounters() {
+  document.querySelectorAll('.counter').forEach((el) => {
+    const target = Number(el.dataset.target || 0);
+    let cur = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
+    const tick = () => {
+      cur = Math.min(target, cur + step);
+      el.textContent = cur;
+      if (cur < target) requestAnimationFrame(tick);
+    };
+    tick();
+  });
 }
 
 /* ---------- Projects: fetch, render, filter, search ---------- */
@@ -176,7 +220,7 @@ function renderProjects(projects) {
   grid.innerHTML = projects.map((p) => `
     <a href="project-details.html?slug=${p.slug}" class="glass-card gradient-border overflow-hidden block group cursor-hoverable reveal-up">
       <div class="h-48 overflow-hidden">
-        <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/111827/00f5ff?text=${encodeURIComponent(p.title)}'">
+        <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" onerror="this.src='https://placehold.co/600x400/111827/1E8EB3?text=${encodeURIComponent(p.title)}'">
       </div>
       <div class="p-5">
         <span class="text-xs text-cyan-300 font-mono">${p.category}</span>

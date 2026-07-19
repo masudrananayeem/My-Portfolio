@@ -4,10 +4,10 @@
    ========================================================================== */
 
 :root {
-  --color-bg: #0f172a;
-  --color-bg-alt: #111827;
-  --color-accent: #00f5ff;
-  --color-accent-2: #a855f7;
+  --color-bg: #0a0f1e;
+  --color-bg-alt: #0d1526;
+  --color-accent: #1E8EB3;
+  --color-accent-2: #16407a;
   --color-text: #e5e7eb;
   --color-text-dim: #9ca3af;
   --color-border: rgba(255, 255, 255, 0.08);
@@ -26,12 +26,52 @@ body {
   background: radial-gradient(circle at 20% 0%, #16213e 0%, var(--color-bg) 45%, #0a0f1e 100%);
   color: var(--color-text);
   font-family: var(--font-body);
-  cursor: none;
   overflow-x: hidden;
 }
 
+/* Native cursor is only hidden on pages that render the custom glow cursor
+   (they add this class to <body>). Without it — e.g. login/dashboard — the
+   real cursor stays visible instead of vanishing. */
+body.has-custom-cursor {
+  cursor: none;
+}
+
 @media (max-width: 768px) {
-  body { cursor: auto; }
+  body.has-custom-cursor { cursor: auto; }
+}
+
+/* ---------- Marquee ticker ---------- */
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 26s linear infinite;
+}
+.marquee-track span {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0 2rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-dim);
+}
+.marquee-track span i {
+  color: var(--color-accent);
+  font-size: 0.7rem;
+  margin-right: 2rem;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
 }
 
 h1, h2, h3, h4, .font-display { font-family: var(--font-display); }
@@ -49,23 +89,23 @@ h1, h2, h3, h4, .font-display { font-family: var(--font-display); }
   background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
   color: #04141a;
   font-weight: 600;
-  box-shadow: 0 0 25px rgba(0, 245, 255, 0.35);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 25px rgba(30, 142, 179, 0.35);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .glow-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 40px rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 40px rgba(22, 64, 122, 0.5);
 }
 
 .outline-btn {
   border: 1px solid var(--glass-border);
   color: var(--color-text);
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .outline-btn:hover {
   border-color: var(--color-accent);
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.25);
+  box-shadow: 0 0 20px rgba(30, 142, 179, 0.25);
   transform: translateY(-3px);
 }
 
@@ -76,12 +116,12 @@ h1, h2, h3, h4, .font-display { font-family: var(--font-display); }
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radius);
-  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease;
 }
 .glass-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(0, 245, 255, 0.35);
-  box-shadow: 0 20px 60px -20px rgba(0, 245, 255, 0.25);
+  transform: translateY(-10px);
+  border-color: rgba(30, 142, 179, 0.35);
+  box-shadow: 0 20px 60px -20px rgba(30, 142, 179, 0.25);
 }
 
 .gradient-border {
@@ -113,12 +153,12 @@ h1, h2, h3, h4, .font-display { font-family: var(--font-display); }
 #cursor-dot { width: 6px; height: 6px; background: var(--color-accent); }
 #cursor-ring {
   width: 34px; height: 34px;
-  border: 1px solid rgba(0, 245, 255, 0.6);
+  border: 1px solid rgba(30, 142, 179, 0.6);
   transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 .cursor-hover #cursor-ring {
   width: 56px; height: 56px;
-  background: rgba(0, 245, 255, 0.08);
+  background: rgba(30, 142, 179, 0.08);
   border-color: var(--color-accent-2);
 }
 @media (max-width: 768px) {
@@ -152,7 +192,7 @@ h1, h2, h3, h4, .font-display { font-family: var(--font-display); }
   width: 0%;
   background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
   z-index: 9998;
-  box-shadow: 0 0 12px rgba(0, 245, 255, 0.8);
+  box-shadow: 0 0 12px rgba(30, 142, 179, 0.8);
 }
 
 /* ---------- Section right-side scroll indicator ---------- */

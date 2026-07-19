@@ -8,25 +8,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  try {
-    const me = await api.getMe();
-    document.getElementById('welcome-msg').textContent = `Welcome back, ${me.admin.name}`;
-  } catch (err) {
-    clearToken();
-    window.location.href = 'login.html';
-    return;
-  }
-
   initTabs();
   document.getElementById('logout-btn').addEventListener('click', () => {
     clearToken();
     window.location.href = 'login.html';
   });
-
-  loadOverview();
   document.getElementById('add-project-btn').addEventListener('click', () => openProjectModal());
   document.getElementById('add-cert-btn').addEventListener('click', () => openCertModal());
   document.getElementById('add-blog-btn').addEventListener('click', () => openBlogModal());
+
+  // Auth check and the overview stats/chart don't depend on each other —
+  // run them together instead of one-after-another so the dashboard paints faster.
+  const [meResult] = await Promise.allSettled([api.getMe(), loadOverview()]);
+  if (meResult.status === 'fulfilled') {
+    document.getElementById('welcome-msg').textContent = `Welcome back, ${meResult.value.admin.name}`;
+  } else {
+    clearToken();
+    window.location.href = 'login.html';
+  }
 });
 
 /* ---------- Tabs ---------- */
@@ -84,7 +83,7 @@ async function loadOverview() {
           datasets: [{
             label: 'Visits',
             data: s.dailyVisits.map((d) => d.count),
-            borderColor: '#00f5ff',
+            borderColor: '#1E8EB3',
             backgroundColor: 'rgba(0,245,255,0.1)',
             tension: 0.4,
             fill: true,
