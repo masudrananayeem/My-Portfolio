@@ -5,11 +5,12 @@ const Project = require('../models/Project');
 // @access  Public
 const getProjects = async (req, res, next) => {
   try {
-    const { search, category, sort = '-createdAt', page = 1, limit = 9 } = req.query;
+    const { search, category, featured, sort = '-createdAt', page = 1, limit = 9 } = req.query;
 
     const query = {};
     if (search) query.$text = { $search: search };
     if (category && category !== 'All') query.category = category;
+    if (featured === 'true') query.featured = true;
 
     const skip = (Number(page) - 1) * Number(limit);
 
