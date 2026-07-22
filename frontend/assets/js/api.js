@@ -65,3 +65,17 @@ const api = {
   logVisit: (page) => apiRequest('/stats/visit', { method: 'POST', body: { page } }).catch(() => {}),
   getSummary: () => apiRequest('/stats/summary', { auth: true }),
 };
+// Add caching for API responses
+const cache = new Map();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+async function apiRequest(endpoint, options = {}) {
+  const cacheKey = `${endpoint}-${JSON.stringify(options)}`;
+  if (cache.has(cacheKey)) {
+    const { data, timestamp } = cache.get(cacheKey);
+    if (Date.now() - timestamp < CACHE_DURATION) {
+      return data;
+    }
+  }
+  // ... existing fetch code
+}
