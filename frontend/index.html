@@ -3,209 +3,716 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Masud Rana Nayeem | Frontend Developer Portfolio</title>
-<meta name="description" content="Masud Rana Nayeem — Frontend Developer specializing in React and Tailwind CSS. Explore projects, skills, and get in touch.">
+<title>Masud Rana Nayeem | Frontend Developer</title>
+<meta name="description" content="Masud Rana Nayeem — Frontend Developer specializing in React, Tailwind CSS, and modern web technologies.">
 
 <!-- Open Graph -->
 <meta property="og:title" content="Masud Rana Nayeem | Frontend Developer">
 <meta property="og:description" content="Frontend Developer portfolio — React, Tailwind CSS, Node.js, MongoDB.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://your-domain.com/assets/images/profile.jpg">
 
 <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon_io/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="favicon_io/android-chrome-512x512.png">
-<link rel="manifest" href="favicon_io/site.webmanifest">
 <meta name="theme-color" content="#0a0f1e">
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<!-- Preconnect for faster loading -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="assets/css/style.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ========== CRITICAL CSS - Inlined for speed ========== */
+:root {
+  --primary: #1E8EB3;
+  --primary-dark: #16407a;
+  --bg: #0a0f1e;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Typography */
+.font-display { font-family: 'Space Grotesk', sans-serif; }
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.glass-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-hover:hover {
+  transform: translateY(-8px);
+  border-color: rgba(30, 142, 179, 0.3);
+  box-shadow: 0 20px 60px -20px rgba(30, 142, 179, 0.2);
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 30px rgba(30, 142, 179, 0.25);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 50px rgba(30, 142, 179, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  padding: 12px 28px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-outline:hover {
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px rgba(30, 142, 179, 0.15);
+}
+
+/* Loader */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease;
+}
+#loader.hide { opacity: 0; pointer-events: none; }
+.loader-ring {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.05);
+  border-top-color: var(--primary);
+  border-right-color: var(--primary-dark);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Profile Image */
+.profile-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+}
+.profile-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(30, 142, 179, 0.2);
+  box-shadow: 0 0 60px rgba(30, 142, 179, 0.1);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 2;
+}
+.profile-img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 80px rgba(30, 142, 179, 0.25);
+}
+
+/* Animated Ring */
+.profile-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--primary), var(--primary-dark), var(--primary));
+  animation: spin-ring 6s linear infinite;
+  z-index: 1;
+}
+.profile-ring-inner {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--bg);
+  z-index: 1;
+}
+@keyframes spin-ring {
+  to { transform: rotate(360deg); }
+}
+
+/* Floating elements */
+.float-element {
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Marquee */
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 18px 0;
+  background: rgba(255,255,255,0.02);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee-track span {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 32px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+.marquee-track span i {
+  color: var(--primary);
+  font-size: 0.6rem;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Section styles */
+.section-label {
+  display: inline-block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+
+/* Stats */
+.stat-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Scroll progress */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  z-index: 9998;
+  width: 0%;
+  box-shadow: 0 0 20px rgba(30, 142, 179, 0.4);
+}
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 14px 24px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  font-size: 0.9rem;
+  transform: translateY(120%);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 9999;
+  max-width: 90%;
+}
+#toast.show { transform: translateY(0); }
+
+/* Modern Footer */
+footer {
+  background: rgba(10, 15, 30, 0.8);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.footer-link {
+  color: var(--text-dim);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+.footer-link:hover {
+  color: var(--primary);
+  transform: translateX(4px);
+}
+.footer-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-dim);
+  transition: all 0.3s ease;
+}
+.footer-social:hover {
+  background: rgba(30, 142, 179, 0.1);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-wrapper { max-width: 260px; }
+  .marquee-track span { font-size: 0.9rem; padding: 0 16px; }
+  .btn-primary, .btn-outline { padding: 10px 20px; font-size: 0.9rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; }
+  .profile-ring { animation: none; }
+}
+</style>
+
+<!-- Defer non-critical JS -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script defer src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
 </head>
-<body class="has-custom-cursor">
+<body>
 
+<!-- LOADER -->
 <div id="loader"><div class="loader-ring"></div></div>
-<canvas id="bg-canvas"></canvas>
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
-<div id="scroll-progress"></div>
-<div id="section-dots"></div>
-<div id="toast" class="glass-card px-5 py-3 text-sm font-medium"></div>
 
-<nav class="navbar fixed top-0 left-0 w-full z-50 py-4">
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- NAVIGATION -->
+<nav class="fixed top-0 left-0 w-full z-50 py-4" style="background:rgba(10,15,30,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.05);">
   <div class="max-w-7xl mx-auto px-6 lg:px-10 flex justify-between items-center">
-    <a href="index.html" class="font-display text-2xl font-bold text-white cursor-hoverable">MRN<span class="text-gradient">.dev</span></a>
-    <div class="hidden lg:flex gap-8 text-sm font-medium">
-      <a href="index.html" class="nav-link cursor-hoverable text-sm font-medium text-white">Home</a>
-      <a href="about.html" class="nav-link cursor-hoverable text-sm font-medium text-gray-300 hover:text-white">About</a>
-      <a href="skills.html" class="nav-link cursor-hoverable text-sm font-medium text-gray-300 hover:text-white">Skills</a>
-      <a href="projects.html" class="nav-link cursor-hoverable text-sm font-medium text-gray-300 hover:text-white">Projects</a>
-      <a href="certificates.html" class="nav-link cursor-hoverable text-sm font-medium text-gray-300 hover:text-white">Certificates</a>
-      <a href="blog.html" class="nav-link cursor-hoverable text-sm font-medium text-gray-300 hover:text-white">Blog</a>
-      <a href="contact.html" class="nav-link cursor-hoverable text-sm font-medium text-gray-300 hover:text-white">Contact</a>
+    <a href="index.html" class="font-display text-2xl font-bold text-white">
+      MRN<span class="text-gradient">.dev</span>
+    </a>
+    
+    <div class="hidden lg:flex items-center gap-8">
+      <a href="index.html" class="text-sm text-white font-medium relative after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-gradient-to-r after:from-[#1E8EB3] after:to-[#16407a] after:transition-all hover:after:w-full">Home</a>
+      <a href="about.html" class="text-sm text-gray-400 hover:text-white transition-colors">About</a>
+      <a href="skills.html" class="text-sm text-gray-400 hover:text-white transition-colors">Skills</a>
+      <a href="projects.html" class="text-sm text-gray-400 hover:text-white transition-colors">Projects</a>
+      <a href="certificates.html" class="text-sm text-gray-400 hover:text-white transition-colors">Certificates</a>
+      <a href="blog.html" class="text-sm text-gray-400 hover:text-white transition-colors">Blog</a>
+      <a href="contact.html" class="text-sm text-gray-400 hover:text-white transition-colors">Contact</a>
     </div>
+    
     <div class="hidden lg:flex items-center gap-3">
-      <a href="login.html" class="text-gray-400 hover:text-white text-sm cursor-hoverable" title="Admin Dashboard"><i class="fas fa-lock"></i></a>
-      <a href="resume.pdf" download class="outline-btn px-4 py-2.5 rounded-full text-xs cursor-hoverable"><i class="fas fa-download mr-1.5"></i>Resume</a>
-      <a href="contact.html" class="glow-btn px-5 py-2.5 rounded-full text-sm cursor-hoverable">Hire Me</a>
+      <a href="login.html" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-lock"></i></a>
+      <a href="resume.pdf" download class="btn-outline text-sm px-4 py-2">Resume</a>
+      <a href="contact.html" class="btn-primary text-sm px-5 py-2">Hire Me</a>
     </div>
+    
     <i class="fas fa-bars text-white text-xl lg:hidden cursor-pointer" id="mobileMenuBtn"></i>
   </div>
+  
   <div id="mobileMenu" class="lg:hidden hidden bg-black/95 mt-4 py-4 px-6 flex flex-col gap-3 border-t border-white/10">
-    <a href="index.html" class="py-1 text-white">Home</a>
-    <a href="about.html" class="py-1 text-gray-300 hover:text-white">About</a>
-    <a href="skills.html" class="py-1 text-gray-300 hover:text-white">Skills</a>
-    <a href="projects.html" class="py-1 text-gray-300 hover:text-white">Projects</a>
-    <a href="certificates.html" class="py-1 text-gray-300 hover:text-white">Certificates</a>
-    <a href="blog.html" class="py-1 text-gray-300 hover:text-white">Blog</a>
-    <a href="contact.html" class="py-1 text-gray-300 hover:text-white">Contact</a>
-    <a href="resume.pdf" download class="text-gray-300 py-1">Download Resume</a>
-    <a href="login.html" class="text-gray-300 py-1">Admin Dashboard</a>
+    <a href="index.html" class="py-2 text-white">Home</a>
+    <a href="about.html" class="py-2 text-gray-300 hover:text-white">About</a>
+    <a href="skills.html" class="py-2 text-gray-300 hover:text-white">Skills</a>
+    <a href="projects.html" class="py-2 text-gray-300 hover:text-white">Projects</a>
+    <a href="certificates.html" class="py-2 text-gray-300 hover:text-white">Certificates</a>
+    <a href="blog.html" class="py-2 text-gray-300 hover:text-white">Blog</a>
+    <a href="contact.html" class="py-2 text-gray-300 hover:text-white">Contact</a>
+    <a href="resume.pdf" download class="py-2 text-gray-300 hover:text-white">Download Resume</a>
+    <a href="login.html" class="py-2 text-gray-300 hover:text-white">Admin Dashboard</a>
   </div>
 </nav>
 
 <main>
 
-  <!-- HERO -->
-  <section id="home" class="min-h-screen flex items-center pt-24 pb-10">
-    <div class="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-10 items-center w-full">
-      <div class="reveal-up">
-        <div class="inline-flex items-center gap-2 glass-card px-4 py-1.5 mb-6 cursor-hoverable">
-          <span class="relative flex h-2 w-2"><span class="animate-ping absolute h-full w-full rounded-full bg-cyan-400 opacity-75"></span><span class="relative rounded-full h-2 w-2 bg-cyan-400"></span></span>
-          <span class="text-xs font-mono text-cyan-200">Portfolio 2026</span>
+  <!-- ========== HERO ========== -->
+  <section class="min-h-screen flex items-center pt-28 pb-12">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        
+        <!-- Left Content -->
+        <div>
+          <div class="inline-flex items-center gap-3 glass px-4 py-2 rounded-full mb-6">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            <span class="text-xs font-mono text-gray-400">Available for work</span>
+          </div>
+          
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white leading-[1.05]">
+            Hi, I'm<br>
+            <span class="text-gradient">Masud Rana</span>
+          </h1>
+          
+          <div class="font-display text-2xl sm:text-3xl mt-3 text-gray-300">
+            <span id="typed-role">Frontend Developer</span>
+          </div>
+          
+          <p class="text-gray-400 mt-5 max-w-lg leading-relaxed">
+            Aspiring web developer focused on building modern, responsive web experiences 
+            and scalable applications with cutting-edge technologies.
+          </p>
+          
+          <div class="flex flex-wrap gap-4 mt-8">
+            <a href="resume.pdf" download class="btn-primary">
+              <i class="fas fa-download"></i> Download CV
+            </a>
+            <a href="projects.html" class="btn-outline">
+              <i class="fas fa-code"></i> View Work
+            </a>
+          </div>
+          
+          <div class="flex gap-4 mt-8">
+            <a href="https://github.com/masudrananayeem" target="_blank" class="w-11 h-11 rounded-full glass flex items-center justify-center hover:text-cyan-300 transition-colors">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank" class="w-11 h-11 rounded-full glass flex items-center justify-center hover:text-cyan-300 transition-colors">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="mailto:masudrananayeem86@gmail.com" class="w-11 h-11 rounded-full glass flex items-center justify-center hover:text-cyan-300 transition-colors">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
         </div>
-        <p class="text-gray-400 text-lg mb-2">Hi, I'm</p>
-        <h1 class="font-display text-6xl sm:text-7xl font-bold text-white leading-[1.05]">Masud Rana<br>Nayeem</h1>
-        <div class="font-display text-2xl sm:text-3xl mt-3 text-gradient" id="typed-role">Frontend Developer</div>
-        <p class="text-gray-400 mt-5 max-w-lg leading-relaxed">Aspiring web developer focused on building modern, responsive web experiences and scalable applications.</p>
-        <div class="flex flex-wrap gap-4 mt-8">
-          <a href="resume.pdf" download class="glow-btn px-7 py-3 rounded-full cursor-hoverable"><i class="fas fa-download mr-2"></i>Download CV</a>
-          <a href="about.html" class="outline-btn px-7 py-3 rounded-full cursor-hoverable"><i class="fas fa-user mr-2"></i>About Me</a>
-          <a href="contact.html" class="outline-btn px-7 py-3 rounded-full cursor-hoverable">Hire Me</a>
-          <a href="projects.html" class="outline-btn px-7 py-3 rounded-full cursor-hoverable">View Projects</a>
+        
+        <!-- Right - Profile Photo -->
+        <div class="flex justify-center lg:justify-end">
+          <div class="profile-wrapper">
+            <!-- Animated Ring -->
+            <div class="profile-ring"></div>
+            <div class="profile-ring-inner"></div>
+            
+            <!-- Profile Image -->
+            <img 
+              src="assets/images/profile.jpg" 
+              alt="Masud Rana Nayeem" 
+              class="profile-img relative z-10"
+              onerror="this.src='https://ui-avatars.com/api/?name=Masud+Rana+Nayeem&size=400&background=1E8EB3&color=fff&font-size=0.5'"
+            >
+            
+            <!-- Floating Badge -->
+            <div class="absolute -bottom-4 -right-4 glass px-4 py-2 rounded-full text-xs font-medium text-cyan-300 flex items-center gap-2 z-20 float-element">
+              <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+              Open to work
+            </div>
+          </div>
         </div>
-        <div class="flex gap-4 mt-8">
-          <a href="https://github.com/masudrananayeem" target="_blank" class="w-11 h-11 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fab fa-github"></i></a>
-          <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank" class="w-11 h-11 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fab fa-linkedin-in"></i></a>
-          <a href="mailto:masudrananayeem86@gmail.com" class="w-11 h-11 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fas fa-envelope"></i></a>
-        </div>
+        
       </div>
-
-      <!-- Three.js scene -->
-      <div id="three-hero" class="h-[420px] lg:h-[560px] relative reveal-fade"></div>
     </div>
   </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee-wrap py-5">
+  <!-- ========== MARQUEE ========== -->
+  <div class="marquee-wrap">
     <div class="marquee-track">
-      <span><i class="fas fa-asterisk"></i>FRONTEND DEVELOPER</span>
-      <span><i class="fas fa-asterisk"></i>REACT.JS</span>
-      <span><i class="fas fa-asterisk"></i>TAILWIND CSS</span>
-      <span><i class="fas fa-asterisk"></i>NODE.JS</span>
-      <span><i class="fas fa-asterisk"></i>ASPIRING FULL STACK DEVELOPER</span>
-      <span><i class="fas fa-asterisk"></i>FRONTEND DEVELOPER</span>
-      <span><i class="fas fa-asterisk"></i>REACT.JS</span>
-      <span><i class="fas fa-asterisk"></i>TAILWIND CSS</span>
-      <span><i class="fas fa-asterisk"></i>NODE.JS</span>
-      <span><i class="fas fa-asterisk"></i>ASPIRING FULL STACK DEVELOPER</span>
+      <span><i class="fas fa-circle"></i>FRONTEND DEVELOPER</span>
+      <span><i class="fas fa-circle"></i>REACT.JS</span>
+      <span><i class="fas fa-circle"></i>TAILWIND CSS</span>
+      <span><i class="fas fa-circle"></i>NODE.JS</span>
+      <span><i class="fas fa-circle"></i>MONGODB</span>
+      <span><i class="fas fa-circle"></i>FULL STACK</span>
+      <span><i class="fas fa-circle"></i>UI/UX DESIGN</span>
+      <!-- Duplicate for seamless loop -->
+      <span><i class="fas fa-circle"></i>FRONTEND DEVELOPER</span>
+      <span><i class="fas fa-circle"></i>REACT.JS</span>
+      <span><i class="fas fa-circle"></i>TAILWIND CSS</span>
+      <span><i class="fas fa-circle"></i>NODE.JS</span>
+      <span><i class="fas fa-circle"></i>MONGODB</span>
+      <span><i class="fas fa-circle"></i>FULL STACK</span>
+      <span><i class="fas fa-circle"></i>UI/UX DESIGN</span>
     </div>
   </div>
 
-  <!-- ABOUT HIGHLIGHT -->
+  <!-- ========== ABOUT PREVIEW ========== -->
   <section class="py-24 border-t border-white/5">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
-      <div class="text-center mb-16 reveal-up">
-        <span class="section-eyebrow">// ABOUT ME</span>
-        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Who I Am</h2>
+      <div class="text-center mb-16">
+        <span class="section-label">// ABOUT ME</span>
+        <h2 class="section-title">Who I Am</h2>
       </div>
-      <div class="grid lg:grid-cols-3 gap-8 items-stretch">
-        <div class="glass-card p-8 reveal-up lg:col-span-2">
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Bio Card -->
+        <div class="glass glass-hover p-8 md:col-span-2 rounded-2xl">
           <h3 class="font-display text-xl text-white mb-4">Bio</h3>
-          <p class="text-gray-400 text-sm leading-relaxed">Aspiring Web Developer & Programmer — a tech enthusiast focused on modern web technologies, building responsive and user-friendly applications. Currently exploring advanced React and backend technologies, with a 2026 goal of becoming a professional Full-Stack Developer.</p>
-          <div class="grid grid-cols-2 gap-4 mt-6 text-sm text-gray-400">
-            <p><i class="fas fa-graduation-cap text-cyan-300 mr-2"></i>CSE, Daffodil Int'l Univ.</p>
-            <p><i class="fas fa-circle text-green-400 mr-2 text-[8px]"></i>Available for freelance</p>
-            <p><i class="fas fa-envelope text-cyan-300 mr-2"></i>masudrananayeem86@gmail.com</p>
-            <p><i class="fas fa-phone text-cyan-300 mr-2"></i>+880 1820-050464</p>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            Aspiring Web Developer & Programmer — a tech enthusiast focused on modern web technologies, 
+            building responsive and user-friendly applications. Currently exploring advanced React and 
+            backend technologies, with a 2026 goal of becoming a professional Full-Stack Developer.
+          </p>
+          <div class="grid grid-cols-2 gap-4 mt-6 text-sm">
+            <div class="flex items-center gap-2 text-gray-400">
+              <i class="fas fa-graduation-cap text-cyan-300"></i>
+              CSE, DIU
+            </div>
+            <div class="flex items-center gap-2 text-gray-400">
+              <i class="fas fa-map-pin text-cyan-300"></i>
+              Bogura, Bangladesh
+            </div>
+            <div class="flex items-center gap-2 text-gray-400">
+              <i class="fas fa-envelope text-cyan-300"></i>
+              masudrananayeem86@gmail.com
+            </div>
+            <div class="flex items-center gap-2 text-gray-400">
+              <i class="fas fa-phone text-cyan-300"></i>
+              +880 1820-050464
+            </div>
           </div>
-          <a href="about.html" class="inline-flex items-center gap-2 text-cyan-300 text-sm mt-6 cursor-hoverable">Read full story <i class="fas fa-arrow-right text-xs"></i></a>
+          <a href="about.html" class="inline-flex items-center gap-2 text-cyan-300 text-sm mt-6 hover:gap-3 transition-all">
+            Read full story <i class="fas fa-arrow-right text-xs"></i>
+          </a>
         </div>
-        <div class="glass-card p-8 reveal-up">
-          <h3 class="font-display text-xl text-white mb-4">By the Numbers</h3>
-          <div class="grid grid-cols-2 gap-6 text-center">
-            <div><p class="font-display text-4xl text-gradient"><span class="counter" data-target="4">0</span></p><p class="text-xs text-gray-500 mt-1">Projects Built</p></div>
-            <div><p class="font-display text-4xl text-gradient"><span class="counter" data-target="10">0</span>+</p><p class="text-xs text-gray-500 mt-1">Tech Skills</p></div>
-            <div><p class="font-display text-4xl text-gradient"><span class="counter" data-target="4">0</span></p><p class="text-xs text-gray-500 mt-1">Yrs @ DIU</p></div>
-            <div><p class="font-display text-4xl text-gradient"><span class="counter" data-target="2026">0</span></p><p class="text-xs text-gray-500 mt-1">Grad Goal</p></div>
+        
+        <!-- Stats Card -->
+        <div class="glass glass-hover p-8 rounded-2xl">
+          <h3 class="font-display text-xl text-white mb-6">Stats</h3>
+          <div class="grid grid-cols-2 gap-6">
+            <div class="text-center">
+              <p class="stat-number">4</p>
+              <p class="stat-label">Projects</p>
+            </div>
+            <div class="text-center">
+              <p class="stat-number">10+</p>
+              <p class="stat-label">Skills</p>
+            </div>
+            <div class="text-center">
+              <p class="stat-number">3</p>
+              <p class="stat-label">Experience</p>
+            </div>
+            <div class="text-center">
+              <p class="stat-number">2026</p>
+              <p class="stat-label">Goal</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SKILLS HIGHLIGHT -->
+  <!-- ========== SKILLS PREVIEW ========== -->
   <section class="py-24 border-t border-white/5">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 text-center">
-      <div class="mb-12 reveal-up">
-        <span class="section-eyebrow">// TECH ARSENAL</span>
-        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Skills &amp; Tools</h2>
-      </div>
-      <div id="skills-preview" class="flex flex-wrap justify-center gap-3 reveal-up"></div>
-      <a href="skills.html" class="inline-flex items-center gap-2 text-cyan-300 text-sm mt-8 cursor-hoverable">See all skills <i class="fas fa-arrow-right text-xs"></i></a>
+      <span class="section-label">// SKILLS</span>
+      <h2 class="section-title mb-12">Tech Arsenal</h2>
+      <div id="skills-preview" class="flex flex-wrap justify-center gap-3"></div>
+      <a href="skills.html" class="inline-flex items-center gap-2 text-cyan-300 text-sm mt-8 hover:gap-3 transition-all">
+        View all skills <i class="fas fa-arrow-right text-xs"></i>
+      </a>
     </div>
   </section>
 
-  <!-- PROJECTS HIGHLIGHT -->
+  <!-- ========== PROJECTS PREVIEW ========== -->
   <section class="py-24 border-t border-white/5">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
-      <div class="text-center mb-14 reveal-up">
-        <span class="section-eyebrow">// FEATURED WORK</span>
-        <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2">Featured Projects</h2>
+      <div class="text-center mb-14">
+        <span class="section-label">// PROJECTS</span>
+        <h2 class="section-title">Featured Work</h2>
       </div>
-      <div id="featured-projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-7"></div>
-      <div class="text-center mt-10 reveal-up">
-        <a href="projects.html" class="outline-btn px-7 py-3 rounded-full cursor-hoverable">View All Projects</a>
+      <div id="featured-projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      <div class="text-center mt-10">
+        <a href="projects.html" class="btn-outline">View All Projects</a>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT CTA -->
-  <section id="contact-cta" class="py-24 border-t border-white/5">
-    <div class="max-w-5xl mx-auto px-6 lg:px-10 text-center reveal-up">
-      <span class="section-eyebrow">// GET IN TOUCH</span>
-      <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mt-2 mb-6">Let's Work Together</h2>
-      <p class="text-gray-400 max-w-xl mx-auto mb-8">Have a project in mind or just want to connect? I'd love to hear from you.</p>
-      <a href="contact.html" class="glow-btn px-8 py-3.5 rounded-full cursor-hoverable">Get In Touch</a>
+  <!-- ========== CONTACT CTA ========== -->
+  <section class="py-24 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-6 lg:px-10 text-center">
+      <span class="section-label">// CONTACT</span>
+      <h2 class="section-title mb-6">Let's Work Together</h2>
+      <p class="text-gray-400 max-w-xl mx-auto mb-8">
+        Have a project in mind or just want to connect? I'd love to hear from you.
+      </p>
+      <a href="contact.html" class="btn-primary text-lg px-10 py-4">
+        Get In Touch <i class="fas fa-arrow-right"></i>
+      </a>
     </div>
   </section>
 
 </main>
 
-<footer class="border-t border-white/5 py-12">
-  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-6">
-    <p class="font-display text-white">MRN<span class="text-gradient">.dev</span></p>
-    <div class="flex gap-5 text-gray-400">
-      <a href="https://github.com/masudrananayeem" target="_blank" class="hover:text-cyan-300 cursor-hoverable"><i class="fab fa-github"></i></a>
-      <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank" class="hover:text-cyan-300 cursor-hoverable"><i class="fab fa-linkedin-in"></i></a>
-      <a href="mailto:masudrananayeem86@gmail.com" class="hover:text-cyan-300 cursor-hoverable"><i class="fas fa-envelope"></i></a>
+<!-- ========== MODERN FOOTER ========== -->
+<footer>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+      
+      <!-- Brand -->
+      <div class="md:col-span-1">
+        <a href="index.html" class="font-display text-2xl font-bold text-white inline-block mb-4">
+          MRN<span class="text-gradient">.dev</span>
+        </a>
+        <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
+          Building modern web experiences with passion and precision.
+        </p>
+        <div class="flex gap-3 mt-6">
+          <a href="https://github.com/masudrananayeem" target="_blank" class="footer-social">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank" class="footer-social">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a href="https://twitter.com/yourhandle" target="_blank" class="footer-social">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="mailto:masudrananayeem86@gmail.com" class="footer-social">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Quick Links -->
+      <div>
+        <h4 class="font-display text-white text-sm font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-3">
+          <li><a href="index.html" class="footer-link">Home</a></li>
+          <li><a href="about.html" class="footer-link">About</a></li>
+          <li><a href="skills.html" class="footer-link">Skills</a></li>
+          <li><a href="projects.html" class="footer-link">Projects</a></li>
+        </ul>
+      </div>
+      
+      <!-- Resources -->
+      <div>
+        <h4 class="font-display text-white text-sm font-semibold mb-4">Resources</h4>
+        <ul class="space-y-3">
+          <li><a href="certificates.html" class="footer-link">Certificates</a></li>
+          <li><a href="blog.html" class="footer-link">Blog</a></li>
+          <li><a href="resume.pdf" download class="footer-link">Download Resume</a></li>
+          <li><a href="login.html" class="footer-link">Admin Panel</a></li>
+        </ul>
+      </div>
+      
+      <!-- Contact Info -->
+      <div>
+        <h4 class="font-display text-white text-sm font-semibold mb-4">Get in Touch</h4>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-3 text-gray-400">
+            <i class="fas fa-map-marker-alt text-cyan-300 mt-1"></i>
+            <span>Bogura, Bangladesh</span>
+          </li>
+          <li class="flex items-start gap-3 text-gray-400">
+            <i class="fas fa-envelope text-cyan-300 mt-1"></i>
+            <a href="mailto:masudrananayeem86@gmail.com" class="footer-link">masudrananayeem86@gmail.com</a>
+          </li>
+          <li class="flex items-start gap-3 text-gray-400">
+            <i class="fas fa-phone text-cyan-300 mt-1"></i>
+            <a href="tel:+8801820050464" class="footer-link">+880 1820-050464</a>
+          </li>
+          <li class="flex items-start gap-3 text-gray-400">
+            <i class="fas fa-clock text-cyan-300 mt-1"></i>
+            <span>GMT+6 · Available 9AM-11PM</span>
+          </li>
+        </ul>
+      </div>
+      
     </div>
-    <p class="text-gray-500 text-sm">© 2026 Masud Rana Nayeem. All rights reserved.</p>
-    <a href="index.html#home" class="w-10 h-10 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fas fa-arrow-up"></i></a>
+    
+    <!-- Bottom Bar -->
+    <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-gray-500 text-sm">
+        © 2026 <span class="text-white">Masud Rana Nayeem</span>. All rights reserved.
+      </p>
+      <div class="flex items-center gap-6 text-xs text-gray-500">
+        <a href="#" class="hover:text-gray-300 transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-gray-300 transition-colors">Terms of Service</a>
+        <a href="#" class="hover:text-gray-300 transition-colors">Sitemap</a>
+      </div>
+      <a href="#home" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:text-cyan-300 transition-colors">
+        <i class="fas fa-arrow-up"></i>
+      </a>
+    </div>
   </div>
 </footer>
 
-<script src="assets/js/api.js"></script>
-<script src="assets/js/animations.js"></script>
-<script src="assets/js/main.js"></script>
+<!-- ========== SCRIPTS ========== -->
+<script>
+// Loader hide
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 300);
+});
+
+// Mobile Menu
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+});
+
+// Scroll Progress
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('scroll-progress').style.width = scrolled + '%';
+});
+
+// Load main scripts
+const scripts = ['assets/js/api.js', 'assets/js/animations.js', 'assets/js/main.js'];
+scripts.forEach(src => {
+  const script = document.createElement('script');
+  script.src = src;
+  script.defer = true;
+  document.body.appendChild(script);
+});
+</script>
+
 </body>
 </html>

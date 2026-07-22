@@ -280,13 +280,4 @@ h1, h2, h3, h4, .font-display { font-family: var(--font-display); }
   color: var(--color-accent);
   font-family: var(--font-display);
 }
-/* Reduce animation on low-end devices */
-@media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.01ms !important; }
-  .profile-ring { animation: none; }
-}
 
-/* Optimize for mobile */
-@media (max-width: 768px) {
-  .profile-image-container { max-width: 280px; }
-}
