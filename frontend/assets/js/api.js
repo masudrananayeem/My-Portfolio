@@ -1,11 +1,11 @@
 /* ==========================================================================
    API.JS — centralized fetch wrapper for the backend REST API
+   Change API_BASE_URL when you deploy the backend (e.g. Render URL)
    ========================================================================== */
 
-// ১. Ekhane Render er link er sheshe /api add kora hoyeche
 const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:5000/api'
-  : 'https://my-portfolio-yxoz.onrender.com/api'; 
+  : 'https://my-portfolio-yxoz.onrender.com'; // <-- replace after deploying to Render
 
 const getToken = () => localStorage.getItem('nayeem_admin_token');
 const setToken = (token) => localStorage.setItem('nayeem_admin_token', token);
@@ -46,7 +46,6 @@ async function apiUpload(file) {
   return data;
 }
 
-// ২. Ekhane normal 'const' kora hoyeche jeno browser theke error na ashe
 const api = {
   // Auth
   login: (email, password) => apiRequest('/auth/login', { method: 'POST', body: { email, password } }),
