@@ -16,17 +16,76 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('add-project-btn').addEventListener('click', () => openProjectModal());
   document.getElementById('add-cert-btn').addEventListener('click', () => openCertModal());
   document.getElementById('add-blog-btn').addEventListener('click', () => openBlogModal());
+  initAvatarUpload();
 
   // Auth check and the overview stats/chart don't depend on each other —
   // run them together instead of one-after-another so the dashboard paints faster.
   const [meResult] = await Promise.allSettled([api.getMe(), loadOverview()]);
   if (meResult.status === 'fulfilled') {
     document.getElementById('welcome-msg').textContent = `Welcome back, ${meResult.value.admin.name}`;
+    renderDashboardAvatar(meResult.value.admin.avatar);
   } else {
     clearToken();
     window.location.href = 'login.html';
   }
 });
+
+/* ---------- Profile photo upload ---------- */
+function renderDashboardAvatar(url) {
+  const wrap = document.getElementById('dashboard-avatar-wrap');
+  if (!wrap) return;
+  if (url) {
+    const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL.replace(/\/api$/, '')}${url}`;
+    wrap.innerHTML = `<img src="${fullUrl}" alt="Profile photo">`;
+  } else {
+    wrap.innerHTML = `<div class="avatar-placeholder"><i class="fas fa-user text-3xl"></i></div>`;
+  }
+}
+
+function initAvatarUpload() {
+  const fileInput = document.getElementById('avatar-file-input');
+  const chooseBtn = document.getElementById('avatar-choose-btn');
+  const saveBtn = document.getElementById('avatar-save-btn');
+  const fileNameEl = document.getElementById('avatar-file-name');
+  if (!fileInput) return;
+
+  let selectedFile = null;
+
+  chooseBtn.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    selectedFile = file;
+    fileNameEl.textContent = file.name;
+    saveBtn.classList.remove('hidden');
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const wrap = document.getElementById('dashboard-avatar-wrap');
+      wrap.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  saveBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Saving…`;
+    try {
+      const uploadRes = await api.uploadFile(selectedFile);
+      await api.updateProfile({ avatar: uploadRes.url });
+      renderDashboardAvatar(uploadRes.url);
+      showToast('Profile photo updated!');
+      saveBtn.classList.add('hidden');
+      fileNameEl.textContent = '';
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = `<i class="fas fa-check mr-2"></i>Save Photo`;
+    }
+  });
+}
 
 /* ---------- Tabs ---------- */
 function initTabs() {

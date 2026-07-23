@@ -32,10 +32,27 @@ async function apiRequest(endpoint, { method = 'GET', body, auth = false } = {})
   return data;
 }
 
+async function apiUpload(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const token = getToken();
+  const res = await fetch(`${API_BASE_URL}/upload`, {
+    method: 'POST',
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: formData,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || `Upload failed with status ${res.status}`);
+  return data;
+}
+
 const api = {
   // Auth
   login: (email, password) => apiRequest('/auth/login', { method: 'POST', body: { email, password } }),
   getMe: () => apiRequest('/auth/me', { auth: true }),
+  getPublicProfile: () => apiRequest('/auth/profile'),
+  updateProfile: (payload) => apiRequest('/auth/me', { method: 'PUT', body: payload, auth: true }),
+  uploadFile: (file) => apiUpload(file),
 
   // Projects
   getProjects: (params = '') => apiRequest(`/projects${params}`),

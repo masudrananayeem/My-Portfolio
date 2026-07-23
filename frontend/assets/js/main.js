@@ -13,7 +13,25 @@ document.addEventListener('DOMContentLoaded', () => {
   initProjectFilters();
   initContactForm();
   animateCounters();
+  loadPublicProfile();
 });
+
+/* ---------- Profile avatar (hero / about page) ---------- */
+async function loadPublicProfile() {
+  const wraps = document.querySelectorAll('#profile-avatar-wrap');
+  if (!wraps.length) return;
+  try {
+    const res = await api.getPublicProfile();
+    const avatar = res.profile && res.profile.avatar;
+    if (!avatar) return; // keep the placeholder icon
+    const fullUrl = avatar.startsWith('http') ? avatar : `${API_BASE_URL.replace(/\/api$/, '')}${avatar}`;
+    wraps.forEach((wrap) => {
+      wrap.innerHTML = `<img src="${fullUrl}" alt="Masud Rana Nayeem">`;
+    });
+  } catch (err) {
+    // Backend not reachable yet — silently keep the placeholder icon
+  }
+}
 
 /* ---------- Typed.js hero role text ---------- */
 function initTypedHero() {
