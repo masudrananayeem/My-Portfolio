@@ -60,4 +60,19 @@ const updateMe = async (req, res, next) => {
   }
 };
 
-module.exports = { loginAdmin, getMe, updateMe };
+// @desc    Public profile info (name + avatar) for the portfolio frontend
+// @route   GET /api/auth/profile
+// @access  Public
+const getPublicProfile = async (req, res, next) => {
+  try {
+    const admin = await Admin.findOne().sort({ createdAt: 1 }).select('name avatar');
+    if (!admin) {
+      return res.json({ success: true, profile: { name: '', avatar: '' } });
+    }
+    res.json({ success: true, profile: { name: admin.name, avatar: admin.avatar } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { loginAdmin, getMe, updateMe, getPublicProfile };

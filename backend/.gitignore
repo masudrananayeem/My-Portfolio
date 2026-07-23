@@ -4,3 +4,41 @@ uploads/*
 !uploads/.gitkeep
 npm-debug.log
 .DS_Store
+
+
+# Dependencies
+node_modules/
+
+# Build
+dist/
+build/
+.vite/
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test
+coverage/
+
+# Vercel
+.vercel
+
+# Misc
+.cache/
