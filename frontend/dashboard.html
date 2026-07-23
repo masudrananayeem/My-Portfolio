@@ -33,6 +33,7 @@
       <button data-tab="certificates" class="tab-btn text-left px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white"><i class="fas fa-award mr-3"></i>Certificates</button>
       <button data-tab="blogs" class="tab-btn text-left px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white"><i class="fas fa-blog mr-3"></i>Blog Posts</button>
       <button data-tab="messages" class="tab-btn text-left px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white"><i class="fas fa-envelope mr-3"></i>Messages</button>
+      <button data-tab="profile" class="tab-btn text-left px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white"><i class="fas fa-user-circle mr-3"></i>Profile</button>
     </nav>
     <button id="logout-btn" class="mt-auto text-left px-4 py-3 rounded-xl text-red-300 hover:bg-red-500/10 text-sm"><i class="fas fa-right-from-bracket mr-3"></i>Logout</button>
   </aside>
@@ -51,6 +52,7 @@
           <option value="certificates">Certificates</option>
           <option value="blogs">Blog Posts</option>
           <option value="messages">Messages</option>
+          <option value="profile">Profile</option>
         </select>
       </div>
     </div>
@@ -95,6 +97,28 @@
     <section id="tab-messages" class="tab-panel hidden">
       <h2 class="font-display text-xl text-white mb-6">Inbox</h2>
       <div id="messages-list" class="space-y-4"></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="tab-profile" class="tab-panel hidden">
+      <h2 class="font-display text-xl text-white mb-6">Profile Photo</h2>
+      <div class="glass-card p-8 max-w-xl">
+        <div class="flex items-center gap-6 mb-6">
+          <div class="avatar-ring w-24 h-24" id="dashboard-avatar-wrap">
+            <div class="avatar-placeholder"><i class="fas fa-user text-3xl"></i></div>
+          </div>
+          <div>
+            <p class="text-white font-medium">Your photo</p>
+            <p class="text-gray-500 text-sm">Shown on the homepage &amp; about page. JPG, PNG or WEBP, up to 5MB.</p>
+          </div>
+        </div>
+        <input type="file" id="avatar-file-input" accept="image/png, image/jpeg, image/webp" class="hidden">
+        <div class="flex gap-3">
+          <button id="avatar-choose-btn" class="outline-btn px-5 py-2.5 rounded-full text-sm cursor-hoverable"><i class="fas fa-image mr-2"></i>Choose Photo</button>
+          <button id="avatar-save-btn" class="glow-btn px-5 py-2.5 rounded-full text-sm cursor-hoverable hidden"><i class="fas fa-check mr-2"></i>Save Photo</button>
+        </div>
+        <p class="text-xs text-gray-500 mt-3" id="avatar-file-name"></p>
+      </div>
     </section>
   </main>
 </div>
