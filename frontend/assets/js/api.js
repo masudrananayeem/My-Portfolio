@@ -5,7 +5,7 @@
 
 const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:5000/api'
-  : 'https://your-backend.onrender.com/api'; // <-- replace after deploying to Render
+  : 'https://my-portfolio-yxoz.onrender.com'; // <-- replace after deploying to Render
 
 const getToken = () => localStorage.getItem('nayeem_admin_token');
 const setToken = (token) => localStorage.setItem('nayeem_admin_token', token);
