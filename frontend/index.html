@@ -122,7 +122,7 @@
   </div>
 
   <!-- ABOUT HIGHLIGHT -->
-  <section class="py-24 border-t border-white/5">
+  <section id="about-highlight" class="py-24 border-t border-white/5">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
       <div class="text-center mb-16 reveal-up">
         <span class="section-eyebrow">// ABOUT ME</span>
@@ -130,8 +130,15 @@
       </div>
       <div class="grid lg:grid-cols-3 gap-8 items-stretch">
         <div class="glass-card p-8 reveal-up lg:col-span-2">
-          <h3 class="font-display text-xl text-white mb-4">Bio</h3>
-          <p class="text-gray-400 text-sm leading-relaxed">Aspiring Web Developer & Programmer — a tech enthusiast focused on modern web technologies, building responsive and user-friendly applications. Currently exploring advanced React and backend technologies, with a 2026 goal of becoming a professional Full-Stack Developer.</p>
+          <div class="flex flex-col sm:flex-row gap-6">
+            <div class="avatar-ring w-24 h-24" id="profile-avatar-wrap">
+              <img src="assets/images/profile.jpg" alt="Masud Rana Nayeem" onerror="this.parentElement.innerHTML='&lt;div class=&quot;avatar-placeholder&quot;&gt;&lt;i class=&quot;fas fa-user text-3xl&quot;&gt;&lt;/i&gt;&lt;/div&gt;'">
+            </div>
+            <div>
+              <h3 class="font-display text-xl text-white mb-4">Bio</h3>
+              <p class="text-gray-400 text-sm leading-relaxed">Aspiring Web Developer & Programmer — a tech enthusiast focused on modern web technologies, building responsive and user-friendly applications. Currently exploring advanced React and backend technologies, with a 2026 goal of becoming a professional Full-Stack Developer.</p>
+            </div>
+          </div>
           <div class="grid grid-cols-2 gap-4 mt-6 text-sm text-gray-400">
             <p><i class="fas fa-graduation-cap text-cyan-300 mr-2"></i>CSE, Daffodil Int'l Univ.</p>
             <p><i class="fas fa-circle text-green-400 mr-2 text-[8px]"></i>Available for freelance</p>
@@ -154,7 +161,7 @@
   </section>
 
   <!-- SKILLS HIGHLIGHT -->
-  <section class="py-24 border-t border-white/5">
+  <section id="skills-highlight" class="py-24 border-t border-white/5">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 text-center">
       <div class="mb-12 reveal-up">
         <span class="section-eyebrow">// TECH ARSENAL</span>
@@ -166,7 +173,7 @@
   </section>
 
   <!-- PROJECTS HIGHLIGHT -->
-  <section class="py-24 border-t border-white/5">
+  <section id="projects-highlight" class="py-24 border-t border-white/5">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
       <div class="text-center mb-14 reveal-up">
         <span class="section-eyebrow">// FEATURED WORK</span>
@@ -191,16 +198,49 @@
 
 </main>
 
-<footer class="border-t border-white/5 py-12">
-  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-6">
-    <p class="font-display text-white">MRN<span class="text-gradient">.dev</span></p>
-    <div class="flex gap-5 text-gray-400">
-      <a href="https://github.com/masudrananayeem" target="_blank" class="hover:text-cyan-300 cursor-hoverable"><i class="fab fa-github"></i></a>
-      <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank" class="hover:text-cyan-300 cursor-hoverable"><i class="fab fa-linkedin-in"></i></a>
-      <a href="mailto:masudrananayeem86@gmail.com" class="hover:text-cyan-300 cursor-hoverable"><i class="fas fa-envelope"></i></a>
+<footer class="border-t border-white/5 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
+      <div>
+        <a href="index.html" class="font-display text-2xl font-bold text-white cursor-hoverable">MRN<span class="text-gradient">.dev</span></a>
+        <p class="text-gray-500 text-sm mt-4 leading-relaxed max-w-xs">Frontend Developer crafting modern, responsive web experiences with React, Tailwind CSS, and Node.js.</p>
+        <div class="flex gap-4 mt-5">
+          <a href="https://github.com/masudrananayeem" target="_blank" class="w-9 h-9 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-cyan-300 cursor-hoverable"><i class="fab fa-github"></i></a>
+          <a href="https://www.linkedin.com/in/masudrananayeem999/" target="_blank" class="w-9 h-9 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-cyan-300 cursor-hoverable"><i class="fab fa-linkedin-in"></i></a>
+          <a href="mailto:masudrananayeem86@gmail.com" class="w-9 h-9 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-cyan-300 cursor-hoverable"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold text-sm mb-4 tracking-wide">QUICK LINKS</h4>
+        <ul class="space-y-2.5 text-sm text-gray-400">
+          <li><a href="index.html" class="hover:text-cyan-300 cursor-hoverable">Home</a></li>
+          <li><a href="about.html" class="hover:text-cyan-300 cursor-hoverable">About</a></li>
+          <li><a href="skills.html" class="hover:text-cyan-300 cursor-hoverable">Skills</a></li>
+          <li><a href="projects.html" class="hover:text-cyan-300 cursor-hoverable">Projects</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold text-sm mb-4 tracking-wide">MORE</h4>
+        <ul class="space-y-2.5 text-sm text-gray-400">
+          <li><a href="certificates.html" class="hover:text-cyan-300 cursor-hoverable">Certificates</a></li>
+          <li><a href="blog.html" class="hover:text-cyan-300 cursor-hoverable">Blog</a></li>
+          <li><a href="contact.html" class="hover:text-cyan-300 cursor-hoverable">Contact</a></li>
+          <li><a href="resume.pdf" download class="hover:text-cyan-300 cursor-hoverable">Download CV</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold text-sm mb-4 tracking-wide">GET IN TOUCH</h4>
+        <ul class="space-y-3 text-sm text-gray-400">
+          <li class="flex items-center gap-2"><i class="fas fa-envelope text-cyan-300 w-4"></i><a href="mailto:masudrananayeem86@gmail.com" class="hover:text-cyan-300 cursor-hoverable">masudrananayeem86@gmail.com</a></li>
+          <li class="flex items-center gap-2"><i class="fas fa-phone-alt text-cyan-300 w-4"></i><a href="tel:+8801820050464" class="hover:text-cyan-300 cursor-hoverable">+880 1820-050464</a></li>
+          <li class="flex items-center gap-2"><i class="fas fa-location-dot text-cyan-300 w-4"></i>Bangladesh</li>
+        </ul>
+      </div>
     </div>
-    <p class="text-gray-500 text-sm">© 2026 Masud Rana Nayeem. All rights reserved.</p>
-    <a href="index.html#home" class="w-10 h-10 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fas fa-arrow-up"></i></a>
+    <div class="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-gray-500 text-sm">© 2026 Masud Rana Nayeem. All rights reserved.</p>
+      <a href="index.html#home" class="w-10 h-10 rounded-full glass-card flex items-center justify-center cursor-hoverable"><i class="fas fa-arrow-up"></i></a>
+    </div>
   </div>
 </footer>
 
