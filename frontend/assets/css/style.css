@@ -458,7 +458,6 @@ img,
 img {
   content-visibility: auto;
   contain: paint;
-  loading: lazy;
 }
 
 /* Reduce repaints */
