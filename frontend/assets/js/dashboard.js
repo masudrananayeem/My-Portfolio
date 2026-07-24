@@ -1,7 +1,20 @@
 /* ==========================================================================
    DASHBOARD.JS — admin dashboard logic (auth-protected)
    ========================================================================== */
-
+// At the top of dashboard.js
+document.addEventListener('DOMContentLoaded', async () => {
+  // Prevent back navigation after logout
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      // Page was restored from bfcache - check auth
+      if (!getToken()) {
+        window.location.href = 'login.html';
+      }
+    }
+  });
+  
+  // Rest of the existing code...
+});
 document.addEventListener('DOMContentLoaded', async () => {
   if (!getToken()) {
     window.location.href = 'login.html';
