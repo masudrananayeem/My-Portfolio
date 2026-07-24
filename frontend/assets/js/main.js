@@ -229,29 +229,67 @@ async function loadProjects() {
 }
 
 function renderProjects(projects) {
-  const grid = document.getElementById('projects-grid');
+  const grid = document.getElementById("projects-grid");
+
   if (!projects.length) {
-    grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">No projects found.</p>`;
+    grid.innerHTML = `
+      <p class="text-gray-500 col-span-full text-center py-16">
+        No projects found.
+      </p>
+    `;
     return;
   }
 
   grid.innerHTML = projects.map((p) => `
-    <a href="project-details.html?slug=${p.slug}" class="glass-card gradient-border overflow-hidden block group cursor-hoverable reveal-up">
-      <div class="h-48 overflow-hidden">
-        <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" onerror="this.src='https://placehold.co/600x400/111827/1E8EB3?text=${encodeURIComponent(p.title)}'">
-      </div>
-      <div class="p-5">
-        <span class="text-xs text-cyan-300 font-mono">${p.category}</span>
-        <h3 class="text-lg font-semibold text-white mt-1">${p.title}</h3>
-        <p class="text-sm text-gray-400 mt-2 line-clamp-2">${p.description}</p>
-        <div class="flex flex-wrap gap-2 mt-4">
-          ${p.techStack.slice(0, 4).map((t) => `<span class="text-[11px] bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-gray-300">${t}</span>`).join('')}
-        </div>
-      </div>
-    </a>
-  `).join('');
+    <a href="project-details.html?slug=${p.slug}"
+       class="project-card group reveal-up">
 
-  if (typeof initGsapReveals === 'function') initGsapReveals();
+        <div class="project-image">
+
+            <img
+                src="${p.image}"
+                alt="${p.title}"
+                loading="lazy"
+                onerror="this.src='https://placehold.co/900x700/111827/1E8EB3?text=${encodeURIComponent(p.title)}'"
+            >
+
+            <div class="project-overlay">
+                <span>View Project</span>
+            </div>
+
+        </div>
+
+        <div class="project-content">
+
+            <span class="project-category">
+                ${p.category}
+            </span>
+
+            <h3>
+                ${p.title}
+            </h3>
+
+            <p>
+                ${p.description}
+            </p>
+
+            <div class="project-tech">
+
+                ${p.techStack.slice(0,5).map(t=>`
+                    <span>${t}</span>
+                `).join("")}
+
+            </div>
+
+        </div>
+
+    </a>
+
+  `).join("");
+
+  if(typeof initGsapReveals==="function"){
+      initGsapReveals();
+  }
 }
 
 function initProjectFilters() {
