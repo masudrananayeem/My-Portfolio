@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { upload, handleMulterError } = require('../middleware/uploadMiddleware');
 const { protect } = require('../middleware/authMiddleware');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('../config/cloudinary');
 
 // @desc    Upload a single file (image)
 // @route   POST /api/upload
@@ -17,9 +16,10 @@ router.post('/', protect, upload.single('file'), handleMulterError, (req, res) =
       });
     }
     
+    // Cloudinary storage puts the hosted URL in req.file.path (multer-storage-cloudinary)
     res.status(201).json({
       success: true,
-      url: `/uploads/${req.file.filename}`,
+      url: req.file.path,
       message: 'File uploaded successfully'
     });
   } catch (error) {
@@ -31,40 +31,40 @@ router.post('/', protect, upload.single('file'), handleMulterError, (req, res) =
   }
 });
 
-// @desc    Delete an image file
+// @desc    Delete an image file from Cloudinary
 // @route   DELETE /api/upload/:filename
 // @access  Private (admin)
-router.delete('/:filename', protect, (req, res) => {
+router.delete('/:filename', protect, async (req, res) => {
   try {
     const filename = req.params.filename;
-    
+
     if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid filename' 
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid filename'
       });
     }
-    
-    const filePath = path.join(__dirname, '../uploads', filename);
-    
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'File not found' 
+
+    // Cloudinary public_id is "folder/filename-without-extension"
+    const publicId = `nayeem-portfolio/${filename.replace(/\.[^/.]+$/, '')}`;
+    const result = await cloudinary.uploader.destroy(publicId);
+
+    if (result.result !== 'ok' && result.result !== 'not found') {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to delete file'
       });
     }
-    
-    fs.unlinkSync(filePath);
-    
-    res.json({ 
-      success: true, 
-      message: 'File deleted successfully' 
+
+    res.json({
+      success: true,
+      message: 'File deleted successfully'
     });
   } catch (error) {
     console.error('Delete error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to delete file' 
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete file'
     });
   }
 });

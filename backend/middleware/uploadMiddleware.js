@@ -1,39 +1,32 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../config/cloudinary');
 
-// Ensure uploads directory exists - ABSOLUTE PATH
-const uploadDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-  console.log('📁 Uploads directory created at:', uploadDir);
-}
-
-// Configure storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    console.log('📁 Saving to:', uploadDir);
-    cb(null, uploadDir);
+/**
+ * Images are uploaded straight to Cloudinary (permanent, free hosting)
+ * instead of the local disk. Local disk storage does NOT persist on
+ * Render/Vercel free hosting -- files disappear on every restart/redeploy.
+ */
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'nayeem-portfolio',
+    allowed_formats: ['jpeg', 'jpg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico'],
+    public_id: (req, file) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      return 'project-' + uniqueSuffix;
+    },
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    // Make sure filename is clean
-    const filename = 'project-' + uniqueSuffix + ext;
-    console.log('📸 Generated filename:', filename);
-    cb(null, filename);
-  }
 });
 
-// File filter
+// File filter (double-checks type before it even reaches Cloudinary)
 const fileFilter = (req, file, cb) => {
   console.log('📁 File received:', file.originalname, 'MIME:', file.mimetype);
-  
+
   const allowedTypes = /jpeg|jpg|png|gif|webp|svg|bmp|ico/;
-  const ext = path.extname(file.originalname).toLowerCase();
   const mime = file.mimetype;
-  
-  if (allowedTypes.test(ext) && allowedTypes.test(mime)) {
+
+  if (allowedTypes.test(mime)) {
     cb(null, true);
   } else {
     cb(new Error('Only image files are allowed (JPEG, PNG, GIF, WEBP, SVG, BMP, ICO)'), false);
@@ -45,30 +38,32 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB
-  }
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
 });
 
 // Error handler
 const handleMulterError = (err, req, res, next) => {
-  console.log('❌ Multer Error:', err);
-  
+  if (err) {
+    console.log('❌ Upload Error:', err);
+  }
+
   if (err instanceof multer.MulterError) {
-    if (err.code === 'FILE_TOO_LARGE') {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'File too large. Maximum size is 5MB.' 
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        success: false,
+        message: 'File too large. Maximum size is 5MB.',
       });
     }
-    return res.status(400).json({ 
-      success: false, 
-      message: err.message 
+    return res.status(400).json({
+      success: false,
+      message: err.message,
     });
   }
   if (err) {
-    return res.status(400).json({ 
-      success: false, 
-      message: err.message 
+    return res.status(400).json({
+      success: false,
+      message: err.message,
     });
   }
   next();

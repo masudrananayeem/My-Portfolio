@@ -273,7 +273,7 @@ async function loadCertificates() {
       // Fix image URL
       let imageUrl = cert.image;
       if (imageUrl && imageUrl.startsWith('/uploads/')) {
-        imageUrl = `http://localhost:5000${imageUrl}`;
+        imageUrl = `${API_BASE_URL.replace(/\/api$/, '')}${imageUrl}`;
       }
       
       return `
