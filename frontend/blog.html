@@ -225,7 +225,7 @@ async function loadBlogs() {
       // Fix image URL
       let imageUrl = blog.coverImage;
       if (imageUrl && imageUrl.startsWith('/uploads/')) {
-        imageUrl = `${API_BASE_URL.replace(/\/api$/, '')}${imageUrl}`;
+        imageUrl = `http://localhost:5000${imageUrl}`;
       }
       
       return `
@@ -289,7 +289,7 @@ async function loadSinglePost(slug) {
     // Fix image URL
     let imageUrl = blog.coverImage;
     if (imageUrl && imageUrl.startsWith('/uploads/')) {
-      imageUrl = `${API_BASE_URL.replace(/\/api$/, '')}${imageUrl}`;
+      imageUrl = `http://localhost:5000${imageUrl}`;
     }
     
     main.innerHTML = `

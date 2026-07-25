@@ -186,7 +186,7 @@ async function loadFeaturedProjects() {
       // Fix image URL
       let imageUrl = p.image;
       if (imageUrl && imageUrl.startsWith('/uploads/')) {
-        imageUrl = `${API_BASE_URL.replace(/\/api$/, '')}${imageUrl}`;
+        imageUrl = `http://localhost:5000${imageUrl}`;
       }
       
       // Fix: Ensure slug exists
@@ -274,7 +274,7 @@ function renderProjects(projects) {
     // Fix image URL
     let imageUrl = p.image;
     if (imageUrl && imageUrl.startsWith('/uploads/')) {
-      imageUrl = `${API_BASE_URL.replace(/\/api$/, '')}${imageUrl}`;
+      imageUrl = `http://localhost:5000${imageUrl}`;
     }
     
     // Create the detail link with slug - IMPORTANT: use encodeURIComponent for safety
