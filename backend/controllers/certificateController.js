@@ -1,6 +1,5 @@
 const Certificate = require('../models/Certificate');
-const fs = require('fs');
-const path = require('path');
+const { uploadBufferToCloudinary, deleteFromCloudinary, extractPublicId } = require('../utils/cloudinaryUpload');
 
 // @desc    Get all certificates
 // @route   GET /api/certificates
@@ -29,8 +28,9 @@ const createCertificate = async (req, res, next) => {
     let certData = { ...req.body };
     
     if (req.file) {
-      certData.image = `/uploads/${req.file.filename}`;
-      console.log('✅ Image saved:', certData.image);
+      const result = await uploadBufferToCloudinary(req.file.buffer, 'portfolio/certificates');
+      certData.image = result.secure_url;
+      console.log('✅ Image uploaded to Cloudinary:', certData.image);
     }
     
     const certificate = await Certificate.create(certData);
@@ -59,19 +59,12 @@ const updateCertificate = async (req, res, next) => {
     let updateData = { ...req.body };
     
     if (req.file) {
-      if (certificate.image && certificate.image.startsWith('/uploads/')) {
-        const oldPath = path.join(__dirname, '..', certificate.image);
-        try {
-          if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath);
-            console.log('🗑️ Old image deleted:', oldPath);
-          }
-        } catch (err) {
-          console.log('⚠️ Old image delete error:', err.message);
-        }
-      }
-      updateData.image = `/uploads/${req.file.filename}`;
-      console.log('✅ New image saved:', updateData.image);
+      const oldPublicId = extractPublicId(certificate.image);
+      if (oldPublicId) await deleteFromCloudinary(oldPublicId);
+
+      const result = await uploadBufferToCloudinary(req.file.buffer, 'portfolio/certificates');
+      updateData.image = result.secure_url;
+      console.log('✅ New image uploaded to Cloudinary:', updateData.image);
     } else if (updateData.existingImage) {
       updateData.image = updateData.existingImage;
       delete updateData.existingImage;
@@ -102,17 +95,8 @@ const deleteCertificate = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Certificate not found' });
     }
     
-    if (certificate.image && certificate.image.startsWith('/uploads/')) {
-      const imagePath = path.join(__dirname, '..', certificate.image);
-      try {
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-          console.log('🗑️ Image deleted:', imagePath);
-        }
-      } catch (err) {
-        console.log('⚠️ Image delete error:', err.message);
-      }
-    }
+    const publicId = extractPublicId(certificate.image);
+    if (publicId) await deleteFromCloudinary(publicId);
     
     await Certificate.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Certificate deleted successfully' });

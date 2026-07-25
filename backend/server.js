@@ -71,7 +71,12 @@ const limiter = rateLimit({
 app.use("/api", limiter);
 
 /* ===================================================
-   Static Files - IMPORTANT: এই লাইনটি অবশ্যই থাকতে হবে
+   Static Files - legacy/local-only fallback.
+   New uploads go straight to Cloudinary (see uploadMiddleware.js /
+   cloudinaryUpload.js) so they're visible from any machine. This route is
+   only kept so old local "/uploads/xyz.jpg" image paths created before
+   that change still resolve when running locally with the original files
+   on disk — run `npm run migrate:images` once to move them to Cloudinary.
 =================================================== */
 
 // Ensure uploads directory exists

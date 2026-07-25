@@ -1,6 +1,5 @@
 const Project = require('../models/Project');
-const fs = require('fs');
-const path = require('path');
+const { uploadBufferToCloudinary, deleteFromCloudinary, extractPublicId } = require('../utils/cloudinaryUpload');
 
 // @desc    Get all projects (public)
 // @route   GET /api/projects
@@ -70,18 +69,11 @@ const createProject = async (req, res, next) => {
       projectData.featured = projectData.featured === 'true';
     }
     
-    // Handle image upload
+    // Handle image upload — send straight to Cloudinary, no local disk involved
     if (req.file) {
-      projectData.image = `/uploads/${req.file.filename}`;
-      console.log('✅ Image saved with path:', projectData.image);
-      
-      // Verify file was actually saved
-      const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
-      if (fs.existsSync(filePath)) {
-        console.log('✅ File exists on disk:', filePath);
-      } else {
-        console.log('❌ File NOT found on disk:', filePath);
-      }
+      const result = await uploadBufferToCloudinary(req.file.buffer, 'portfolio/projects');
+      projectData.image = result.secure_url;
+      console.log('✅ Image uploaded to Cloudinary:', projectData.image);
     } else {
       console.log('⚠️ No image file uploaded');
     }
@@ -128,29 +120,14 @@ const updateProject = async (req, res, next) => {
     
     // Handle image upload
     if (req.file) {
-      // Delete old image
-      if (project.image && project.image.startsWith('/uploads/')) {
-        const oldPath = path.join(__dirname, '..', project.image);
-        try {
-          if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath);
-            console.log('🗑️ Old image deleted:', oldPath);
-          }
-        } catch (err) {
-          console.log('⚠️ Old image delete error:', err.message);
-        }
-      }
-      // Save new image
-      updateData.image = `/uploads/${req.file.filename}`;
-      console.log('✅ New image saved:', updateData.image);
-      
-      // Verify file was saved
-      const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
-      if (fs.existsSync(filePath)) {
-        console.log('✅ File exists on disk:', filePath);
-      } else {
-        console.log('❌ File NOT found on disk:', filePath);
-      }
+      // Delete old Cloudinary image (if any — legacy local "/uploads/" paths are skipped)
+      const oldPublicId = extractPublicId(project.image);
+      if (oldPublicId) await deleteFromCloudinary(oldPublicId);
+
+      // Upload new image
+      const result = await uploadBufferToCloudinary(req.file.buffer, 'portfolio/projects');
+      updateData.image = result.secure_url;
+      console.log('✅ New image uploaded to Cloudinary:', updateData.image);
     } else if (updateData.existingImage) {
       updateData.image = updateData.existingImage;
       delete updateData.existingImage;
@@ -184,18 +161,9 @@ const deleteProject = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Project not found' });
     }
     
-    // Delete image file
-    if (project.image && project.image.startsWith('/uploads/')) {
-      const imagePath = path.join(__dirname, '..', project.image);
-      try {
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-          console.log('🗑️ Image deleted:', imagePath);
-        }
-      } catch (err) {
-        console.log('⚠️ Image delete error:', err.message);
-      }
-    }
+    // Delete image from Cloudinary
+    const publicId = extractPublicId(project.image);
+    if (publicId) await deleteFromCloudinary(publicId);
     
     await Project.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Project deleted successfully' });

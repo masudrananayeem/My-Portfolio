@@ -8,10 +8,12 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "seed:admin": "node utils/seedAdmin.js",
-    "seed:projects": "node utils/seedProjects.js"
+    "seed:projects": "node utils/seedProjects.js",
+    "migrate:images": "node utils/migrateImagesToCloudinary.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
     "cors": "^2.8.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

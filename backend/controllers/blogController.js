@@ -1,6 +1,5 @@
 const Blog = require('../models/Blog');
-const fs = require('fs');
-const path = require('path');
+const { uploadBufferToCloudinary, deleteFromCloudinary, extractPublicId } = require('../utils/cloudinaryUpload');
 
 // @desc    Get all blogs (public)
 // @route   GET /api/blogs
@@ -72,8 +71,9 @@ const createBlog = async (req, res, next) => {
     let blogData = { ...req.body };
     
     if (req.file) {
-      blogData.coverImage = `/uploads/${req.file.filename}`;
-      console.log('✅ Cover image saved:', blogData.coverImage);
+      const result = await uploadBufferToCloudinary(req.file.buffer, 'portfolio/blogs');
+      blogData.coverImage = result.secure_url;
+      console.log('✅ Cover image uploaded to Cloudinary:', blogData.coverImage);
     }
     
     const blog = await Blog.create(blogData);
@@ -102,19 +102,12 @@ const updateBlog = async (req, res, next) => {
     let updateData = { ...req.body };
     
     if (req.file) {
-      if (blog.coverImage && blog.coverImage.startsWith('/uploads/')) {
-        const oldPath = path.join(__dirname, '..', blog.coverImage);
-        try {
-          if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath);
-            console.log('🗑️ Old cover image deleted:', oldPath);
-          }
-        } catch (err) {
-          console.log('⚠️ Old image delete error:', err.message);
-        }
-      }
-      updateData.coverImage = `/uploads/${req.file.filename}`;
-      console.log('✅ New cover image saved:', updateData.coverImage);
+      const oldPublicId = extractPublicId(blog.coverImage);
+      if (oldPublicId) await deleteFromCloudinary(oldPublicId);
+
+      const result = await uploadBufferToCloudinary(req.file.buffer, 'portfolio/blogs');
+      updateData.coverImage = result.secure_url;
+      console.log('✅ New cover image uploaded to Cloudinary:', updateData.coverImage);
     } else if (updateData.existingImage) {
       updateData.coverImage = updateData.existingImage;
       delete updateData.existingImage;
@@ -145,17 +138,8 @@ const deleteBlog = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Blog post not found' });
     }
     
-    if (blog.coverImage && blog.coverImage.startsWith('/uploads/')) {
-      const imagePath = path.join(__dirname, '..', blog.coverImage);
-      try {
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-          console.log('🗑️ Cover image deleted:', imagePath);
-        }
-      } catch (err) {
-        console.log('⚠️ Image delete error:', err.message);
-      }
-    }
+    const publicId = extractPublicId(blog.coverImage);
+    if (publicId) await deleteFromCloudinary(publicId);
     
     await Blog.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Blog post deleted successfully' });
