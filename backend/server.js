@@ -43,6 +43,8 @@ app.use(
       "https://my-portfolio-gold-seven-79.vercel.app",
     ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
@@ -51,7 +53,7 @@ app.use(
 =================================================== */
 
 app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(
   morgan(process.env.NODE_ENV === "production" ? "combined" : "dev")
@@ -69,13 +71,21 @@ const limiter = rateLimit({
 app.use("/api", limiter);
 
 /* ===================================================
-   Static Files
+   Static Files - IMPORTANT: এই লাইনটি অবশ্যই থাকতে হবে
 =================================================== */
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, "uploads");
+if (!require('fs').existsSync(uploadsDir)) {
+  require('fs').mkdirSync(uploadsDir, { recursive: true });
+  console.log('📁 Uploads directory created');
+}
 
 app.use(
   "/uploads",
-  express.static(path.join(__dirname, "uploads"))
+  express.static(uploadsDir)
 );
+console.log('📁 Serving static files from:', uploadsDir);
 
 /* ===================================================
    Health Check

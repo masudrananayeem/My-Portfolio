@@ -1,6 +1,5 @@
 /* ==========================================================================
-   MAIN.JS — Optimized for Performance
-   All features retained, but performance optimized
+   MAIN.JS — homepage-specific logic
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -183,19 +182,28 @@ async function loadFeaturedProjects() {
       grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">No projects yet.</p>`;
       return;
     }
-    grid.innerHTML = list.map((p) => `
-      <a href="project-details.html?slug=${p.slug}" class="glass-card gradient-border overflow-hidden block group cursor-hoverable reveal-up">
+    grid.innerHTML = list.map((p) => {
+      // Fix image URL
+      let imageUrl = p.image;
+      if (imageUrl && imageUrl.startsWith('/uploads/')) {
+        imageUrl = `http://localhost:5000${imageUrl}`;
+      }
+      
+      // Fix: Ensure slug exists
+      const slug = p.slug || p._id;
+      
+      return `
+      <a href="project-details.html?slug=${slug}" class="glass-card gradient-border overflow-hidden block group cursor-hoverable reveal-up">
         <div class="h-48 overflow-hidden">
-          <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='https://placehold.co/600x400/111827/1E8EB3?text=${encodeURIComponent(p.title)}'">
+          <img src="${imageUrl || 'https://placehold.co/600x400/111827/1E8EB3?text=No+Image'}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='https://placehold.co/600x400/111827/1E8EB3?text=${encodeURIComponent(p.title)}'">
         </div>
         <div class="p-5">
-          <span class="text-xs text-cyan-300 font-mono">${p.category}</span>
-          <h3 class="text-lg font-semibold text-white mt-1">${p.title}</h3>
-          <p class="text-sm text-gray-400 mt-2 line-clamp-2">${p.description}</p>
+          <span class="text-xs text-cyan-300 font-mono">${p.category || 'General'}</span>
+          <h3 class="text-lg font-semibold text-white mt-1">${p.title || 'Untitled'}</h3>
+          <p class="text-sm text-gray-400 mt-2 line-clamp-2">${p.description || 'No description available.'}</p>
         </div>
       </a>
-    `).join('');
-    // Force show elements if GSAP fails
+    `}).join('');
     setTimeout(() => {
       document.querySelectorAll('.reveal-up').forEach(el => {
         if (!el.dataset.revealed) {
@@ -206,6 +214,7 @@ async function loadFeaturedProjects() {
     }, 500);
     if (typeof initGsapReveals === 'function') initGsapReveals();
   } catch (err) {
+    console.error('Error loading featured projects:', err);
     grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">Couldn't load projects.</p>`;
   }
 }
@@ -239,38 +248,56 @@ async function loadProjects() {
     if (currentFilter !== 'All') params.set('category', currentFilter);
     if (currentSearch) params.set('search', currentSearch);
     const res = await api.getProjects(`?${params.toString()}`);
+    console.log('📥 Projects loaded:', res.data);
     renderProjects(res.data);
   } catch (err) {
-    grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">Couldn't load projects.</p>`;
+    console.error('Error loading projects:', err);
+    grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10">Couldn't load projects. Make sure backend is running.</p>`;
   }
 }
 
 function renderProjects(projects) {
   const grid = document.getElementById("projects-grid");
 
-  if (!projects.length) {
+  if (!projects || !projects.length) {
     grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-16">No projects found.</p>`;
     return;
   }
 
-  grid.innerHTML = projects.map((p) => `
-    <a href="project-details.html?slug=${p.slug}" class="project-card group reveal-up">
+  console.log('📊 Rendering projects count:', projects.length);
+
+  grid.innerHTML = projects.map((p) => {
+    // Use slug or _id - make sure slug exists
+    const slug = p.slug || p._id;
+    console.log('🔗 Project:', p.title, '→ Slug:', slug);
+    
+    // Fix image URL
+    let imageUrl = p.image;
+    if (imageUrl && imageUrl.startsWith('/uploads/')) {
+      imageUrl = `http://localhost:5000${imageUrl}`;
+    }
+    
+    // Create the detail link with slug - IMPORTANT: use encodeURIComponent for safety
+    const detailLink = `project-details.html?slug=${encodeURIComponent(slug)}`;
+    
+    return `
+    <a href="${detailLink}" class="project-card group reveal-up">
       <div class="project-image">
-        <img src="${p.image}" alt="${p.title}" loading="lazy" onerror="this.src='https://placehold.co/900x700/111827/1E8EB3?text=${encodeURIComponent(p.title)}'">
+        <img src="${imageUrl || 'https://placehold.co/900x700/111827/1E8EB3?text=No+Image'}" alt="${p.title || 'Project'}" loading="lazy" onerror="this.src='https://placehold.co/900x700/111827/1E8EB3?text=${encodeURIComponent(p.title || 'Project')}'">
         <div class="project-overlay"><span>View Project</span></div>
       </div>
       <div class="project-content">
-        <span class="project-category">${p.category}</span>
-        <h3>${p.title}</h3>
-        <p>${p.description}</p>
+        <span class="project-category">${p.category || 'General'}</span>
+        <h3>${p.title || 'Untitled'}</h3>
+        <p>${p.description || 'No description available.'}</p>
         <div class="project-tech">
-          ${p.techStack.slice(0,5).map(t => `<span>${t}</span>`).join("")}
+          ${(p.techStack || []).slice(0,5).map(t => `<span>${t}</span>`).join("")}
         </div>
       </div>
     </a>
-  `).join("");
+  `}).join("");
 
-  // Force show projects immediately
+  // Force show all project cards
   setTimeout(() => {
     document.querySelectorAll('.project-card.reveal-up').forEach(el => {
       el.style.opacity = '1';
