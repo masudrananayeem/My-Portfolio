@@ -1,21 +1,16 @@
 /* ==========================================================================
    DASHBOARD.JS — admin dashboard logic (auth-protected)
    ========================================================================== */
-// At the top of dashboard.js
+
 document.addEventListener('DOMContentLoaded', async () => {
-  // Prevent back navigation after logout
   window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
-      // Page was restored from bfcache - check auth
       if (!getToken()) {
         window.location.href = 'login.html';
       }
     }
   });
   
-  // Rest of the existing code...
-});
-document.addEventListener('DOMContentLoaded', async () => {
   if (!getToken()) {
     window.location.href = 'login.html';
     return;
@@ -31,8 +26,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('add-blog-btn').addEventListener('click', () => openBlogModal());
   initAvatarUpload();
 
-  // Auth check and the overview stats/chart don't depend on each other —
-  // run them together instead of one-after-another so the dashboard paints faster.
   const [meResult] = await Promise.allSettled([api.getMe(), loadOverview()]);
   if (meResult.status === 'fulfilled') {
     document.getElementById('welcome-msg').textContent = `Welcome back, ${meResult.value.admin.name}`;
@@ -43,13 +36,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-/* ---------- Profile photo upload ---------- */
 function renderDashboardAvatar(url) {
   const wrap = document.getElementById('dashboard-avatar-wrap');
   if (!wrap) return;
   if (url) {
     const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL.replace(/\/api$/, '')}${url}`;
-    wrap.innerHTML = `<img src="${fullUrl}" alt="Profile photo">`;
+    wrap.innerHTML = `<img src="${fullUrl}" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
   } else {
     wrap.innerHTML = `<div class="avatar-placeholder"><i class="fas fa-user text-3xl"></i></div>`;
   }
@@ -60,7 +52,7 @@ function initAvatarUpload() {
   const chooseBtn = document.getElementById('avatar-choose-btn');
   const saveBtn = document.getElementById('avatar-save-btn');
   const fileNameEl = document.getElementById('avatar-file-name');
-  if (!fileInput) return;
+  if (!fileInput || !chooseBtn) return;
 
   let selectedFile = null;
 
@@ -70,44 +62,46 @@ function initAvatarUpload() {
     const file = fileInput.files[0];
     if (!file) return;
     selectedFile = file;
-    fileNameEl.textContent = file.name;
-    saveBtn.classList.remove('hidden');
+    if (fileNameEl) fileNameEl.textContent = file.name;
+    if (saveBtn) saveBtn.classList.remove('hidden');
     const reader = new FileReader();
     reader.onload = (e) => {
       const wrap = document.getElementById('dashboard-avatar-wrap');
-      wrap.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+      if (wrap) {
+        wrap.innerHTML = `<img src="${e.target.result}" alt="Preview" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      }
     };
     reader.readAsDataURL(file);
   });
 
-  saveBtn.addEventListener('click', async () => {
-    if (!selectedFile) return;
-    saveBtn.disabled = true;
-    saveBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Saving…`;
-    try {
-      const uploadRes = await api.uploadFile(selectedFile);
-      await api.updateProfile({ avatar: uploadRes.url });
-      renderDashboardAvatar(uploadRes.url);
-      showToast('Profile photo updated!');
-      saveBtn.classList.add('hidden');
-      fileNameEl.textContent = '';
-    } catch (err) {
-      showToast(err.message, 'error');
-    } finally {
-      saveBtn.disabled = false;
-      saveBtn.innerHTML = `<i class="fas fa-check mr-2"></i>Save Photo`;
-    }
-  });
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Saving…`;
+      try {
+        const uploadRes = await api.uploadFile(selectedFile);
+        await api.updateProfile({ avatar: uploadRes.url });
+        renderDashboardAvatar(uploadRes.url);
+        showToast('Profile photo updated!');
+        saveBtn.classList.add('hidden');
+        if (fileNameEl) fileNameEl.textContent = '';
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = `<i class="fas fa-check mr-2"></i>Save Photo`;
+      }
+    });
+  }
 }
 
-/* ---------- Tabs ---------- */
 function initTabs() {
   const buttons = document.querySelectorAll('.tab-btn');
   const panels = document.querySelectorAll('.tab-panel');
   const mobileSelect = document.getElementById('mobile-tab-select');
 
   const activate = (tab) => {
-    buttons.forEach((b) => b.classList.toggle('bg-white/5', b.dataset.tab === tab) && b.classList.toggle('text-white', b.dataset.tab === tab));
     buttons.forEach((b) => {
       const isActive = b.dataset.tab === tab;
       b.classList.toggle('bg-white/5', isActive);
@@ -125,9 +119,9 @@ function initTabs() {
 
   buttons.forEach((b) => b.addEventListener('click', () => activate(b.dataset.tab)));
   if (mobileSelect) mobileSelect.addEventListener('change', (e) => activate(e.target.value));
+  if (buttons.length > 0) activate('overview');
 }
 
-/* ---------- Overview / Stats ---------- */
 async function loadOverview() {
   try {
     const res = await api.getSummary();
@@ -148,72 +142,88 @@ async function loadOverview() {
 
     if (typeof Chart !== 'undefined') {
       const ctx = document.getElementById('visitors-chart');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: s.dailyVisits.map((d) => d._id),
-          datasets: [{
-            label: 'Visits',
-            data: s.dailyVisits.map((d) => d.count),
-            borderColor: '#1E8EB3',
-            backgroundColor: 'rgba(0,245,255,0.1)',
-            tension: 0.4,
-            fill: true,
-          }],
-        },
-        options: {
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-            y: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: s.dailyVisits.map((d) => d._id),
+            datasets: [{
+              label: 'Visits',
+              data: s.dailyVisits.map((d) => d.count),
+              borderColor: '#1E8EB3',
+              backgroundColor: 'rgba(0,245,255,0.1)',
+              tension: 0.4,
+              fill: true,
+            }],
           },
-        },
-      });
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+              y: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+            },
+          },
+        });
+      }
     }
   } catch (err) {
     showToast(err.message, 'error');
   }
 }
 
-/* ---------- Projects CRUD ---------- */
 async function loadProjectsTable() {
   const table = document.getElementById('projects-table');
+  if (!table) return;
   table.innerHTML = '<p class="text-gray-500 text-sm">Loading…</p>';
-  const res = await api.getProjects('?limit=100');
-  if (!res.data.length) {
-    table.innerHTML = '<p class="text-gray-500 text-sm">No projects yet. Click "Add Project" to create one.</p>';
-    return;
+  try {
+    const res = await api.getProjects('?limit=100');
+    if (!res.data || !res.data.length) {
+      table.innerHTML = '<p class="text-gray-500 text-sm">No projects yet. Click "Add Project" to create one.</p>';
+      return;
+    }
+    table.innerHTML = `
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-gray-500 border-b border-white/10">
+          <th class="py-3 pr-4">Title</th><th class="py-3 pr-4">Category</th><th class="py-3 pr-4">Featured</th><th class="py-3">Actions</th>
+        </tr></thead>
+        <tbody>
+          ${res.data.map((p) => `
+            <tr class="border-b border-white/5">
+              <td class="py-3 pr-4 text-white">${p.title}</td>
+              <td class="py-3 pr-4 text-gray-400">${p.category}</td>
+              <td class="py-3 pr-4">${p.featured ? '<i class="fas fa-star text-yellow-400"></i>' : '-'}</td>
+              <td class="py-3 flex gap-3">
+                <button onclick='openProjectModal(${JSON.stringify(p).replace(/'/g, "&apos;")})' class="text-cyan-300 hover:underline">Edit</button>
+                <button onclick="deleteProject('${p._id}')" class="text-red-400 hover:underline">Delete</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    table.innerHTML = `<p class="text-gray-500 text-sm">Error loading projects: ${err.message}</p>`;
   }
-  table.innerHTML = `
-    <table class="w-full text-sm">
-      <thead><tr class="text-left text-gray-500 border-b border-white/10">
-        <th class="py-3 pr-4">Title</th><th class="py-3 pr-4">Category</th><th class="py-3 pr-4">Featured</th><th class="py-3">Actions</th>
-      </tr></thead>
-      <tbody>
-        ${res.data.map((p) => `
-          <tr class="border-b border-white/5">
-            <td class="py-3 pr-4 text-white">${p.title}</td>
-            <td class="py-3 pr-4 text-gray-400">${p.category}</td>
-            <td class="py-3 pr-4">${p.featured ? '<i class="fas fa-star text-yellow-400"></i>' : '-'}</td>
-            <td class="py-3 flex gap-3">
-              <button onclick='openProjectModal(${JSON.stringify(p).replace(/'/g, "&apos;")})' class="text-cyan-300 hover:underline">Edit</button>
-              <button onclick="deleteProject('${p._id}')" class="text-red-400 hover:underline">Delete</button>
-            </td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
 }
 
+// ================================================================
+// OPEN PROJECT MODAL WITH COMPLETE SUBMIT HANDLER
+// ================================================================
 function openProjectModal(project = null) {
   const isEdit = !!project;
+  
   showModal(`
     <h3 class="font-display text-xl text-white mb-5">${isEdit ? 'Edit' : 'Add'} Project</h3>
-    <form id="project-form" class="space-y-3">
+    <form id="project-form" class="space-y-3" enctype="multipart/form-data">
       <input name="title" required placeholder="Title" value="${project?.title || ''}" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
       <textarea name="description" required placeholder="Short description" rows="2" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">${project?.description || ''}</textarea>
-      <input name="image" required placeholder="Image URL" value="${project?.image || ''}" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
+      <div>
+        <label class="text-xs text-gray-400 block mb-1">Project Image</label>
+        <input name="image" type="file" accept="image/*" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none file:bg-cyan-500/20 file:border-0 file:rounded-full file:px-4 file:py-1.5 file:text-sm file:text-cyan-300">
+        ${project?.image ? `<p class="text-xs text-gray-500 mt-1">Current: ${project.image.split('/').pop()}</p><input type="hidden" name="existingImage" value="${project.image}">` : ''}
+        <p class="text-xs text-gray-500 mt-1">Upload an image (JPG, PNG, GIF, WEBP - Max 5MB)</p>
+      </div>
       <input name="techStack" required placeholder="Tech stack (comma separated)" value="${project?.techStack?.join(', ') || ''}" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
       <select name="category" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none bg-transparent">
         ${['Full Stack','Frontend','Backend','Mobile','AI/ML','Other'].map(c => `<option value="${c}" ${project?.category===c?'selected':''}>${c}</option>`).join('')}
@@ -228,27 +238,78 @@ function openProjectModal(project = null) {
     </form>
   `);
 
+  // ================================================================
+  // PROJECT FORM SUBMIT HANDLER (COMPLETE WITH DEBUG LOGS)
+  // ================================================================
   document.getElementById('project-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = e.target;
-    const payload = {
-      title: f.title.value,
-      description: f.description.value,
-      image: f.image.value,
-      techStack: f.techStack.value.split(',').map((t) => t.trim()).filter(Boolean),
-      category: f.category.value,
-      githubLink: f.githubLink.value,
-      liveLink: f.liveLink.value,
-      featured: f.featured.checked,
-    };
+    const formData = new FormData();
+    
+    // Text fields
+    formData.append('title', f.title.value);
+    formData.append('description', f.description.value);
+    formData.append('techStack', f.techStack.value);
+    formData.append('category', f.category.value);
+    formData.append('githubLink', f.githubLink.value);
+    formData.append('liveLink', f.liveLink.value);
+    formData.append('featured', f.featured.checked ? 'true' : 'false');
+    
+    // Image file - IMPORTANT: field name must be 'image'
+    const imageInput = f.querySelector('input[name="image"]');
+    if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      console.log('📸 Image file selected:', imageInput.files[0].name);
+      formData.append('image', imageInput.files[0]);
+    } else {
+      console.log('⚠️ No image selected');
+      // If editing and have existing image
+      if (f.existingImage) {
+        formData.append('existingImage', f.existingImage.value);
+      }
+    }
+    
+    // Debug: Log all form data
+    console.log('📤 Sending FormData:');
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
+    }
+    
+    const btn = f.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Uploading…';
+    
     try {
-      if (isEdit) await api.updateProject(project._id, payload);
-      else await api.createProject(payload);
-      showToast(`Project ${isEdit ? 'updated' : 'created'}!`);
+      const token = getToken();
+      const url = isEdit ? `${API_BASE_URL}/projects/${project._id}` : `${API_BASE_URL}/projects`;
+      
+      console.log('📤 Sending to:', url);
+      console.log('🔑 Token:', token ? 'Present' : 'Missing');
+      
+      const response = await fetch(url, {
+        method: isEdit ? 'PUT' : 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`
+          // DON'T set Content-Type header - browser will set it with boundary
+        },
+        body: formData,
+      });
+      
+      const data = await response.json();
+      console.log('📥 Response:', data);
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to save project');
+      }
+      
+      showToast(`Project ${isEdit ? 'updated' : 'created'} successfully!`);
       closeModal();
       loadProjectsTable();
     } catch (err) {
       showToast(err.message, 'error');
+      console.error('❌ Error:', err);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = isEdit ? 'Update' : 'Create';
     }
   });
 }
@@ -264,38 +325,46 @@ async function deleteProject(id) {
   }
 }
 
-/* ---------- Certificates CRUD ---------- */
 async function loadCertsTable() {
   const table = document.getElementById('certs-table');
+  if (!table) return;
   table.innerHTML = '<p class="text-gray-500 text-sm">Loading…</p>';
-  const res = await api.getCertificates();
-  if (!res.data.length) {
-    table.innerHTML = '<p class="text-gray-500 text-sm">No certificates yet.</p>';
-    return;
+  try {
+    const res = await api.getCertificates();
+    if (!res.data || !res.data.length) {
+      table.innerHTML = '<p class="text-gray-500 text-sm">No certificates yet.</p>';
+      return;
+    }
+    table.innerHTML = `
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-gray-500 border-b border-white/10"><th class="py-3 pr-4">Title</th><th class="py-3 pr-4">Issuer</th><th class="py-3">Actions</th></tr></thead>
+        <tbody>
+          ${res.data.map((c) => `
+            <tr class="border-b border-white/5">
+              <td class="py-3 pr-4 text-white">${c.title}</td>
+              <td class="py-3 pr-4 text-gray-400">${c.issuer}</td>
+              <td class="py-3"><button onclick="deleteCert('${c._id}')" class="text-red-400 hover:underline">Delete</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    table.innerHTML = `<p class="text-gray-500 text-sm">Error loading certificates: ${err.message}</p>`;
   }
-  table.innerHTML = `
-    <table class="w-full text-sm">
-      <thead><tr class="text-left text-gray-500 border-b border-white/10"><th class="py-3 pr-4">Title</th><th class="py-3 pr-4">Issuer</th><th class="py-3">Actions</th></tr></thead>
-      <tbody>
-        ${res.data.map((c) => `
-          <tr class="border-b border-white/5">
-            <td class="py-3 pr-4 text-white">${c.title}</td>
-            <td class="py-3 pr-4 text-gray-400">${c.issuer}</td>
-            <td class="py-3"><button onclick="deleteCert('${c._id}')" class="text-red-400 hover:underline">Delete</button></td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
 }
 
 function openCertModal() {
   showModal(`
     <h3 class="font-display text-xl text-white mb-5">Add Certificate</h3>
-    <form id="cert-form" class="space-y-3">
+    <form id="cert-form" class="space-y-3" enctype="multipart/form-data">
       <input name="title" required placeholder="Certificate title" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
       <input name="issuer" required placeholder="Issued by" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
-      <input name="image" required placeholder="Image URL" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
+      <div>
+        <label class="text-xs text-gray-400 block mb-1">Certificate Image</label>
+        <input name="image" type="file" accept="image/*" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none file:bg-cyan-500/20 file:border-0 file:rounded-full file:px-4 file:py-1.5 file:text-sm file:text-cyan-300">
+        <p class="text-xs text-gray-500 mt-1">Upload an image (JPG, PNG, GIF, WEBP - Max 5MB)</p>
+      </div>
       <input name="issueDate" required type="date" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
       <input name="verifyLink" placeholder="Verification URL" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
       <div class="flex gap-3 pt-2">
@@ -304,16 +373,42 @@ function openCertModal() {
       </div>
     </form>
   `);
+  
   document.getElementById('cert-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = e.target;
+    const formData = new FormData();
+    formData.append('title', f.title.value);
+    formData.append('issuer', f.issuer.value);
+    formData.append('issueDate', f.issueDate.value);
+    formData.append('verifyLink', f.verifyLink.value);
+    
+    const imageInput = f.querySelector('input[name="image"]');
+    if (imageInput && imageInput.files && imageInput.files[0]) {
+      formData.append('image', imageInput.files[0]);
+    }
+    
+    const btn = f.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Uploading…';
+    
     try {
-      await api.createCertificate({ title: f.title.value, issuer: f.issuer.value, image: f.image.value, issueDate: f.issueDate.value, verifyLink: f.verifyLink.value });
+      const token = getToken();
+      const response = await fetch(`${API_BASE_URL}/certificates`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to create certificate');
       showToast('Certificate added!');
       closeModal();
       loadCertsTable();
     } catch (err) {
       showToast(err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create';
     }
   });
 }
@@ -329,38 +424,46 @@ async function deleteCert(id) {
   }
 }
 
-/* ---------- Blogs CRUD ---------- */
 async function loadBlogsTable() {
   const table = document.getElementById('blogs-table');
+  if (!table) return;
   table.innerHTML = '<p class="text-gray-500 text-sm">Loading…</p>';
-  const res = await api.getBlogs('?limit=100');
-  if (!res.data.length) {
-    table.innerHTML = '<p class="text-gray-500 text-sm">No blog posts yet.</p>';
-    return;
+  try {
+    const res = await api.getBlogs('?limit=100');
+    if (!res.data || !res.data.length) {
+      table.innerHTML = '<p class="text-gray-500 text-sm">No blog posts yet.</p>';
+      return;
+    }
+    table.innerHTML = `
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-gray-500 border-b border-white/10"><th class="py-3 pr-4">Title</th><th class="py-3 pr-4">Category</th><th class="py-3 pr-4">Views</th><th class="py-3">Actions</th></tr></thead>
+        <tbody>
+          ${res.data.map((b) => `
+            <tr class="border-b border-white/5">
+              <td class="py-3 pr-4 text-white">${b.title}</td>
+              <td class="py-3 pr-4 text-gray-400">${b.category}</td>
+              <td class="py-3 pr-4 text-gray-400">${b.views}</td>
+              <td class="py-3"><button onclick="deleteBlog('${b._id}')" class="text-red-400 hover:underline">Delete</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    table.innerHTML = `<p class="text-gray-500 text-sm">Error loading blogs: ${err.message}</p>`;
   }
-  table.innerHTML = `
-    <table class="w-full text-sm">
-      <thead><tr class="text-left text-gray-500 border-b border-white/10"><th class="py-3 pr-4">Title</th><th class="py-3 pr-4">Category</th><th class="py-3 pr-4">Views</th><th class="py-3">Actions</th></tr></thead>
-      <tbody>
-        ${res.data.map((b) => `
-          <tr class="border-b border-white/5">
-            <td class="py-3 pr-4 text-white">${b.title}</td>
-            <td class="py-3 pr-4 text-gray-400">${b.category}</td>
-            <td class="py-3 pr-4 text-gray-400">${b.views}</td>
-            <td class="py-3"><button onclick="deleteBlog('${b._id}')" class="text-red-400 hover:underline">Delete</button></td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
 }
 
 function openBlogModal() {
   showModal(`
     <h3 class="font-display text-xl text-white mb-5">New Blog Post</h3>
-    <form id="blog-form" class="space-y-3">
+    <form id="blog-form" class="space-y-3" enctype="multipart/form-data">
       <input name="title" required placeholder="Title" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
-      <input name="coverImage" placeholder="Cover image URL" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
+      <div>
+        <label class="text-xs text-gray-400 block mb-1">Cover Image</label>
+        <input name="image" type="file" accept="image/*" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none file:bg-cyan-500/20 file:border-0 file:rounded-full file:px-4 file:py-1.5 file:text-sm file:text-cyan-300">
+        <p class="text-xs text-gray-500 mt-1">Upload a cover image (JPG, PNG, GIF, WEBP - Max 5MB)</p>
+      </div>
       <input name="category" placeholder="Category" value="General" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none">
       <textarea name="excerpt" required placeholder="Short excerpt" rows="2" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none"></textarea>
       <textarea name="content" required placeholder="Full content (Markdown supported)" rows="6" class="w-full glass-card px-4 py-2.5 text-sm text-white outline-none"></textarea>
@@ -370,16 +473,42 @@ function openBlogModal() {
       </div>
     </form>
   `);
+  
   document.getElementById('blog-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = e.target;
+    const formData = new FormData();
+    formData.append('title', f.title.value);
+    formData.append('category', f.category.value);
+    formData.append('excerpt', f.excerpt.value);
+    formData.append('content', f.content.value);
+    
+    const imageInput = f.querySelector('input[name="image"]');
+    if (imageInput && imageInput.files && imageInput.files[0]) {
+      formData.append('image', imageInput.files[0]);
+    }
+    
+    const btn = f.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Uploading…';
+    
     try {
-      await api.createBlog({ title: f.title.value, coverImage: f.coverImage.value, category: f.category.value, excerpt: f.excerpt.value, content: f.content.value });
+      const token = getToken();
+      const response = await fetch(`${API_BASE_URL}/blogs`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to publish blog');
       showToast('Blog post published!');
       closeModal();
       loadBlogsTable();
     } catch (err) {
       showToast(err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Publish';
     }
   });
 }
@@ -395,27 +524,31 @@ async function deleteBlog(id) {
   }
 }
 
-/* ---------- Messages ---------- */
 async function loadMessages() {
   const list = document.getElementById('messages-list');
+  if (!list) return;
   list.innerHTML = '<p class="text-gray-500 text-sm">Loading…</p>';
-  const res = await api.getMessages();
-  if (!res.data.length) {
-    list.innerHTML = '<p class="text-gray-500 text-sm">No messages yet.</p>';
-    return;
-  }
-  list.innerHTML = res.data.map((m) => `
-    <div class="glass-card p-5 ${m.read ? 'opacity-60' : ''}">
-      <div class="flex justify-between items-start">
-        <div>
-          <p class="text-white font-medium">${m.subject}</p>
-          <p class="text-xs text-gray-500">${m.name} · ${m.email} · ${new Date(m.createdAt).toLocaleString()}</p>
+  try {
+    const res = await api.getMessages();
+    if (!res.data || !res.data.length) {
+      list.innerHTML = '<p class="text-gray-500 text-sm">No messages yet.</p>';
+      return;
+    }
+    list.innerHTML = res.data.map((m) => `
+      <div class="glass-card p-5 ${m.read ? 'opacity-60' : ''}">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-white font-medium">${m.subject}</p>
+            <p class="text-xs text-gray-500">${m.name} · ${m.email} · ${new Date(m.createdAt).toLocaleString()}</p>
+          </div>
+          <button onclick="deleteMessage('${m._id}')" class="text-red-400 text-sm hover:underline">Delete</button>
         </div>
-        <button onclick="deleteMessage('${m._id}')" class="text-red-400 text-sm hover:underline">Delete</button>
+        <p class="text-gray-400 text-sm mt-3">${m.message}</p>
       </div>
-      <p class="text-gray-400 text-sm mt-3">${m.message}</p>
-    </div>
-  `).join('');
+    `).join('');
+  } catch (err) {
+    list.innerHTML = `<p class="text-gray-500 text-sm">Error loading messages: ${err.message}</p>`;
+  }
 }
 
 async function deleteMessage(id) {
@@ -429,24 +562,41 @@ async function deleteMessage(id) {
   }
 }
 
-/* ---------- Modal helper ---------- */
 function showModal(html) {
-  document.getElementById('modal-content').innerHTML = html;
+  const content = document.getElementById('modal-content');
   const backdrop = document.getElementById('modal-backdrop');
-  backdrop.classList.remove('hidden');
-  backdrop.classList.add('flex');
-}
-function closeModal() {
-  const backdrop = document.getElementById('modal-backdrop');
-  backdrop.classList.add('hidden');
-  backdrop.classList.remove('flex');
+  if (content) content.innerHTML = html;
+  if (backdrop) {
+    backdrop.classList.remove('hidden');
+    backdrop.classList.add('flex');
+  }
 }
 
-/* ---------- Toast (standalone, since animations.js isn't loaded here) ---------- */
+function closeModal() {
+  const backdrop = document.getElementById('modal-backdrop');
+  if (backdrop) {
+    backdrop.classList.add('hidden');
+    backdrop.classList.remove('flex');
+  }
+}
+
 function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
+  if (!toast) {
+    alert(message);
+    return;
+  }
   toast.textContent = message;
   toast.className = `glass-card px-5 py-3 text-sm font-medium ${type === 'error' ? 'border-red-500/50 text-red-300' : 'text-cyan-200'} show`;
   clearTimeout(toast._timer);
   toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
 }
+
+// Make functions globally accessible
+window.openProjectModal = openProjectModal;
+window.deleteProject = deleteProject;
+window.deleteCert = deleteCert;
+window.deleteBlog = deleteBlog;
+window.deleteMessage = deleteMessage;
+window.closeModal = closeModal;
+window.showToast = showToast;
