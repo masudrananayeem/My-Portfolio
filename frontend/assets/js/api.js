@@ -13,15 +13,9 @@ const setToken = (token) => localStorage.setItem("nayeem_admin_token", token);
 const clearToken = () => localStorage.removeItem("nayeem_admin_token");
 
 async function apiRequest(endpoint, options = {}) {
-  const {
-    method = "GET",
-    body = null,
-    auth = false,
-  } = options;
+  const { method = "GET", body = null, auth = false } = options;
 
-  const headers = {
-    "Content-Type": "application/json",
-  };
+  const headers = { "Content-Type": "application/json" };
 
   if (auth) {
     const token = getToken();
@@ -53,11 +47,7 @@ async function apiUpload(file) {
 
   const response = await fetch(`${API_BASE_URL}/upload`, {
     method: "POST",
-    headers: token
-      ? {
-          Authorization: `Bearer ${token}`,
-        }
-      : {},
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
     body: formData,
   });
 
@@ -71,148 +61,57 @@ async function apiUpload(file) {
 }
 
 const api = {
-
-  // ===========================
   // AUTH
-  // ===========================
-
   login: (email, password) =>
-    apiRequest("/auth/login", {
-      method: "POST",
-      body: { email, password },
-    }),
+    apiRequest("/auth/login", { method: "POST", body: { email, password } }),
 
-  getMe: () =>
-    apiRequest("/auth/me", {
-      auth: true,
-    }),
+  getMe: () => apiRequest("/auth/me", { auth: true }),
 
-  getPublicProfile: () =>
-    apiRequest("/auth/profile"),
+  getPublicProfile: () => apiRequest("/auth/profile"),
 
   updateProfile: (payload) =>
-    apiRequest("/auth/me", {
-      method: "PUT",
-      body: payload,
-      auth: true,
-    }),
+    apiRequest("/auth/me", { method: "PUT", body: payload, auth: true }),
 
   uploadFile: apiUpload,
 
-  // ===========================
   // PROJECTS
-  // ===========================
-
-  getProjects: (params = "") =>
-    apiRequest(`/projects${params}`),
-
-  getProject: (slug) =>
-    apiRequest(`/projects/${slug}`),
-
+  getProjects: (params = "") => apiRequest(`/projects${params}`),
+  getProject: (slug) => apiRequest(`/projects/${slug}`),
   createProject: (payload) =>
-    apiRequest("/projects", {
-      method: "POST",
-      body: payload,
-      auth: true,
-    }),
-
+    apiRequest("/projects", { method: "POST", body: payload, auth: true }),
   updateProject: (id, payload) =>
-    apiRequest(`/projects/${id}`, {
-      method: "PUT",
-      body: payload,
-      auth: true,
-    }),
-
+    apiRequest(`/projects/${id}`, { method: "PUT", body: payload, auth: true }),
   deleteProject: (id) =>
-    apiRequest(`/projects/${id}`, {
-      method: "DELETE",
-      auth: true,
-    }),
+    apiRequest(`/projects/${id}`, { method: "DELETE", auth: true }),
 
-  // ===========================
   // CERTIFICATES
-  // ===========================
-
-  getCertificates: () =>
-    apiRequest("/certificates"),
-
+  getCertificates: () => apiRequest("/certificates"),
   createCertificate: (payload) =>
-    apiRequest("/certificates", {
-      method: "POST",
-      body: payload,
-      auth: true,
-    }),
-
+    apiRequest("/certificates", { method: "POST", body: payload, auth: true }),
   deleteCertificate: (id) =>
-    apiRequest(`/certificates/${id}`, {
-      method: "DELETE",
-      auth: true,
-    }),
+    apiRequest(`/certificates/${id}`, { method: "DELETE", auth: true }),
 
-  // ===========================
   // BLOGS
-  // ===========================
-
-  getBlogs: (params = "") =>
-    apiRequest(`/blogs${params}`),
-
-  getBlog: (slug) =>
-    apiRequest(`/blogs/${slug}`),
-
+  getBlogs: (params = "") => apiRequest(`/blogs${params}`),
+  getBlog: (slug) => apiRequest(`/blogs/${slug}`),
   createBlog: (payload) =>
-    apiRequest("/blogs", {
-      method: "POST",
-      body: payload,
-      auth: true,
-    }),
-
+    apiRequest("/blogs", { method: "POST", body: payload, auth: true }),
   deleteBlog: (id) =>
-    apiRequest(`/blogs/${id}`, {
-      method: "DELETE",
-      auth: true,
-    }),
-
+    apiRequest(`/blogs/${id}`, { method: "DELETE", auth: true }),
   addComment: (slug, payload) =>
-    apiRequest(`/blogs/${slug}/comments`, {
-      method: "POST",
-      body: payload,
-    }),
+    apiRequest(`/blogs/${slug}/comments`, { method: "POST", body: payload }),
 
-  // ===========================
   // CONTACT
-  // ===========================
-
   sendMessage: (payload) =>
-    apiRequest("/contact", {
-      method: "POST",
-      body: payload,
-    }),
-
-  getMessages: () =>
-    apiRequest("/contact", {
-      auth: true,
-    }),
-
+    apiRequest("/contact", { method: "POST", body: payload }),
+  getMessages: () => apiRequest("/contact", { auth: true }),
   deleteMessage: (id) =>
-    apiRequest(`/contact/${id}`, {
-      method: "DELETE",
-      auth: true,
-    }),
+    apiRequest(`/contact/${id}`, { method: "DELETE", auth: true }),
 
-  // ===========================
   // STATS
-  // ===========================
-
   logVisit: (page) =>
-    apiRequest("/stats/visit", {
-      method: "POST",
-      body: { page },
-    }).catch(() => {}),
-
-  getSummary: () =>
-    apiRequest("/stats/summary", {
-      auth: true,
-    }),
+    apiRequest("/stats/visit", { method: "POST", body: { page } }).catch(() => {}),
+  getSummary: () => apiRequest("/stats/summary", { auth: true }),
 };
 
 window.api = api;
