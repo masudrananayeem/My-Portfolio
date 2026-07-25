@@ -23,7 +23,7 @@ async function loadPublicProfile() {
     const res = await api.getPublicProfile();
     const avatar = res.profile && res.profile.avatar;
     if (!avatar) return;
-    const fullUrl = avatar.startsWith('http') ? avatar : `${API_BASE_URL.replace(/\/api$/, '')}${avatar}`;
+    const fullUrl = resolveImageUrl(avatar);
     wraps.forEach((wrap) => {
       wrap.innerHTML = `<img src="${fullUrl}" alt="Masud Rana Nayeem">`;
     });
@@ -184,14 +184,11 @@ async function loadFeaturedProjects() {
     }
     grid.innerHTML = list.map((p) => {
       // Fix image URL
-      let imageUrl = p.image;
-      if (imageUrl && imageUrl.startsWith('/uploads/')) {
-        imageUrl = `http://localhost:5000${imageUrl}`;
-      }
-      
+      const imageUrl = resolveImageUrl(p.image);
+
       // Fix: Ensure slug exists
       const slug = p.slug || p._id;
-      
+
       return `
       <a href="project-details.html?slug=${slug}" class="glass-card gradient-border overflow-hidden block group cursor-hoverable reveal-up">
         <div class="h-48 overflow-hidden">
@@ -270,16 +267,13 @@ function renderProjects(projects) {
     // Use slug or _id - make sure slug exists
     const slug = p.slug || p._id;
     console.log('🔗 Project:', p.title, '→ Slug:', slug);
-    
+
     // Fix image URL
-    let imageUrl = p.image;
-    if (imageUrl && imageUrl.startsWith('/uploads/')) {
-      imageUrl = `http://localhost:5000${imageUrl}`;
-    }
-    
+    const imageUrl = resolveImageUrl(p.image);
+
     // Create the detail link with slug - IMPORTANT: use encodeURIComponent for safety
     const detailLink = `project-details.html?slug=${encodeURIComponent(slug)}`;
-    
+
     return `
     <a href="${detailLink}" class="project-card group reveal-up">
       <div class="project-image">

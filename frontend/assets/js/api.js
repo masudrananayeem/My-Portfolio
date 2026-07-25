@@ -12,6 +12,13 @@ const getToken = () => localStorage.getItem("nayeem_admin_token");
 const setToken = (token) => localStorage.setItem("nayeem_admin_token", token);
 const clearToken = () => localStorage.removeItem("nayeem_admin_token");
 
+/* ---------- Image URL resolver ---------- */
+function resolveImageUrl(image) {
+  if (!image) return null;
+  if (image.startsWith("http")) return image;
+  return `${API_BASE_URL.replace(/\/api$/, "")}${image}`;
+}
+
 async function apiRequest(endpoint, options = {}) {
   const { method = "GET", body = null, auth = false } = options;
 
@@ -119,3 +126,4 @@ window.API_BASE_URL = API_BASE_URL;
 window.getToken = getToken;
 window.setToken = setToken;
 window.clearToken = clearToken;
+window.resolveImageUrl = resolveImageUrl;
